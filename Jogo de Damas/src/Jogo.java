@@ -2,56 +2,8 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 public class Jogo {
-    public static char[][] iniciarTabuleiro() {
-        char[][] tabuleiro = new char[8][8];
-        if (Main.debugging) {
-            return ValidadorInput.obterTabuleiro();
-        }
-        for (int linha = 0; linha < 8; linha++) {
-            for (int coluna = 0; coluna < 8; coluna++) {
-                tabuleiro[linha][coluna] = ' ';
-            }
-        }
-        for (int linha = 0; linha < 8; linha++) {
-            for (int coluna = 0; coluna < 8; coluna++) {
-                if (linha == 0 || linha == 2) {
-                    if (coluna == 1 || coluna == 3 || coluna == 5 || coluna == 7) {
-                        tabuleiro[linha][coluna] = '□';
-                    }
-                } else if (linha == 1) {
-                    if (coluna == 0 || coluna == 2 || coluna == 4 || coluna == 6) {
-                        tabuleiro[linha][coluna] = '□';
-                    }
-                } else if (linha == 5 || linha == 7) {
-                    if (coluna == 0 || coluna == 2 || coluna == 4 || coluna == 6) {
-                        tabuleiro[linha][coluna] = '○';
-                    }
-                } else if (linha == 6) {
-                    if (coluna == 1 || coluna == 3 || coluna == 5 || coluna == 7) {
-                        tabuleiro[linha][coluna] = '○';
-                    }
-                }
-            }
-        }
-        return tabuleiro;
-    }
-
-    public static void mostrarTabuleiro(char[][] tabuleiro) {
-        System.out.println("\n====== TABULEIRO =====");
-        System.out.println("   A B C D E F G H");
-        for (int linha = 0; linha < 8; linha++) {
-            System.out.printf("%d  ", linha + 1);
-            for (int coluna = 0; coluna < 8; coluna++) {
-                System.out.printf("%s ", tabuleiro[linha][coluna]);
-            }
-            System.out.printf(" %d", linha + 1);
-            System.out.println();
-        }
-        System.out.println("   A B C D E F G H");
-    }
-
     public static char[][] jogadaJogador(char[][] tabuleiro, char simboloJogador) {
-        mostrarTabuleiro(tabuleiro);
+        Tabuleiros.mostrarTabuleiro(tabuleiro);
         char simboloAJogar;
         int[] coordenadaVelha = new int[2];
         int[] coordenadaNova = new int[2];
@@ -64,12 +16,33 @@ public class Jogo {
 
         int[][][] jogadasObrigatorias = obterJogadasObrigatorias(tabuleiro, simboloJogador);
         if (jogadasObrigatorias.length > 0) {
+            boolean comeuPeca = true;
             int[][] jogadaObrigatoria = realizarJogadaObrigatoria(tabuleiro, simboloJogador, jogadasObrigatorias);
             coordenadaVelha = jogadaObrigatoria[0];
             coordenadaNova = jogadaObrigatoria[1];
             simboloAJogar = tabuleiro[coordenadaVelha[0]][coordenadaVelha[1]];
-            tabuleiro = apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova);
-            return inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
+            tabuleiro = apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
+            inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
+            // Se uma peça que acabou de comer ainda pode comer mais, ela continua realizando jogadas obrigatórias em loop
+            while (comeuPeca) {
+                int[][] jogadasObrigatoriasNovas = jogadasObrigatoriasDaPeca(tabuleiro, simboloJogador, coordenadaNova);
+                if (jogadasObrigatoriasNovas.length > 0) {
+                    char[][] tabuleiroHipotetico = copiarTabuleiro(tabuleiro);
+                    char simboloPossivel = obterSimboloPossivel(simboloJogador);
+                    tabuleiroHipotetico[coordenadaNova[0]][coordenadaNova[1]] = obterSimboloSelecionado(simboloJogador);
+                    mostrarCoordenadasJogaveis(jogadasObrigatoriasNovas);
+                    inserirJogadasPossiveis(tabuleiroHipotetico, jogadasObrigatoriasNovas, simboloPossivel);
+                    Tabuleiros.mostrarTabuleiro(tabuleiroHipotetico);
+                    coordenadaVelha = coordenadaNova.clone();
+                    coordenadaNova = escolherJogadaObrigatoria(jogadasObrigatoriasNovas);
+                    tabuleiro = apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
+                    inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
+                }
+                else {
+                    comeuPeca = false;
+                }
+            }
+            return tabuleiro;
         }
 
 
@@ -96,7 +69,7 @@ public class Jogo {
             coordenadaNova = escolherCoordenadaAJogarDama(tabuleiro, coordenadaVelha, simboloAJogar);
         }
         if (comeuPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova)) {
-            tabuleiro = apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova);
+            tabuleiro = apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
         }
 
         return inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
@@ -147,7 +120,7 @@ public class Jogo {
 
         inserirJogadasPossiveis(tabuleiroHipotetico, jogadasPossiveis, simboloPossivel);
         tabuleiroHipotetico[coordenadaUm][coordenadaDois] = simboloSelecionado;
-        mostrarTabuleiro(tabuleiroHipotetico);
+        Tabuleiros.mostrarTabuleiro(tabuleiroHipotetico);
         mostrarCoordenadasJogaveis(jogadasPossiveis);
 
         return obterJogada(jogadasPossiveis);
@@ -372,28 +345,98 @@ public class Jogo {
         }
     }
 
-    public static char[][] apagarPecaInimigo(char[][] tabuleiro, int[] coordenadaVelha, int[] coordenadaNova) {
+    public static char[][] apagarPecaInimigo(char[][] tabuleiro, int[] coordenadaVelha, int[] coordenadaNova, char simboloAtual) {
         // Precisa funcionar tanto para dama quanto para peça normal
-        // Primeiro, precisamos saber a direção
-        int coordenadaUm;
-        int coordenadaDois;
-        if (coordenadaVelha[0] > coordenadaNova[0]) {
-            coordenadaUm = coordenadaNova[0] + 1;
-            if (coordenadaVelha[1] > coordenadaNova[1]) {
-                coordenadaDois = coordenadaNova[1] + 1;
-            } else {
-                coordenadaDois = coordenadaNova[1] - 1;
+        // Precisa funcionar mesmo se a dama andar várias casas após comer o oponente
+        int coordenadaVelhaUm = coordenadaVelha[0];
+        int coordenadaVelhaDois = coordenadaVelha[1];
+        int coordenadaNovaUm = coordenadaNova[0];
+        int coordenadaNovaDois = coordenadaNova[1];
+        char simboloDamaAtual = obterSimboloDama(simboloAtual);
+        char simboloDamaOposto = obterSimboloDamaOposto(simboloAtual);
+        char simboloOposto = obterSimboloOposto(simboloAtual);
+        int[] coordenadaInimigo = new int[2];
 
+        // Precisamos testar para todas as diagonais, até encontrar onde a peça do inimigo está
+        if (coordenadaVelhaUm > coordenadaNovaUm) {
+            if (coordenadaVelhaDois > coordenadaNovaDois) {
+                for (int i = 1; i < 7; i++) {
+                    if (coordenadaVelhaUm - i < 0 || coordenadaVelhaDois - i < 0) {
+                        break;
+                    }
+                    if (tabuleiro[coordenadaVelhaUm - i][coordenadaVelhaDois - i] == simboloAtual
+                    || tabuleiro[coordenadaVelhaUm - i][coordenadaVelhaDois - i] == simboloDamaAtual) {
+                        break;
+                    }
+                    if (tabuleiro[coordenadaVelhaUm - i][coordenadaVelhaDois - i] == simboloOposto
+                            || tabuleiro[coordenadaVelhaUm - i][coordenadaVelhaDois - i] == simboloDamaOposto) {
+                        coordenadaInimigo[0] = coordenadaVelhaUm - i;
+                        coordenadaInimigo[1] = coordenadaVelhaDois - i;
+                        break;
+                    }
+                }
             }
-        } else {
-            coordenadaUm = coordenadaNova[0] - 1;
-            if (coordenadaVelha[1] > coordenadaNova[1]) {
-                coordenadaDois = coordenadaNova[1] + 1;
-            } else {
-                coordenadaDois = coordenadaNova[1] - 1;
+            // Para coordenadaVelhaUm > coordenadaNovaUm
+            else {
+                if (coordenadaVelhaDois < coordenadaNovaDois) {
+                    for (int i = 1; i < 7; i++) {
+                        if (coordenadaVelhaUm - i < 0 || coordenadaVelhaDois + i > 7) {
+                            break;
+                        }
+                        if (tabuleiro[coordenadaVelhaUm - i][coordenadaVelhaDois + i] == simboloAtual
+                                || tabuleiro[coordenadaVelhaUm - i][coordenadaVelhaDois + i] == simboloDamaAtual) {
+                            break;
+                        }
+                        if (tabuleiro[coordenadaVelhaUm - i][coordenadaVelhaDois + i] == simboloOposto
+                                || tabuleiro[coordenadaVelhaUm - i][coordenadaVelhaDois + i] == simboloDamaOposto) {
+                            coordenadaInimigo[0] = coordenadaVelhaUm - i;
+                            coordenadaInimigo[1] = coordenadaVelhaDois + i;
+                            break;
+                        }
+                    }
+                }
             }
         }
-        tabuleiro[coordenadaUm][coordenadaDois] = ' ';
+        // Para coordenadaVelhaUm < coordenadaNovaUm
+        else {
+            if (coordenadaVelhaDois > coordenadaNovaDois) {
+                for (int i = 1; i < 7; i++) {
+                    if (coordenadaVelhaUm + i > 7 || coordenadaVelhaDois - i < 0) {
+                        break;
+                    }
+                    if (tabuleiro[coordenadaVelhaUm + i][coordenadaVelhaDois - i] == simboloAtual
+                            || tabuleiro[coordenadaVelhaUm + i][coordenadaVelhaDois - i] == simboloDamaAtual) {
+                        break;
+                    }
+                    if (tabuleiro[coordenadaVelhaUm + i][coordenadaVelhaDois - i] == simboloOposto
+                            || tabuleiro[coordenadaVelhaUm + i][coordenadaVelhaDois - i] == simboloDamaOposto) {
+                        coordenadaInimigo[0] = coordenadaVelhaUm + i;
+                        coordenadaInimigo[1] = coordenadaVelhaDois - i;
+                        break;
+                    }
+                }
+            }
+            // Para coordenadaVelhaDois < coordenadaNovaDois
+            else {
+                for (int i = 1; i < 7; i++) {
+                    if (coordenadaVelhaUm + i > 7 || coordenadaVelhaDois + i > 7) {
+                        break;
+                    }
+                    if (tabuleiro[coordenadaVelhaUm + i][coordenadaVelhaDois + i] == simboloAtual
+                            || tabuleiro[coordenadaVelhaUm + i][coordenadaVelhaDois + i] == simboloDamaAtual) {
+                        break;
+                    }
+                    if (tabuleiro[coordenadaVelhaUm + i][coordenadaVelhaDois + i] == simboloOposto
+                            || tabuleiro[coordenadaVelhaUm + i][coordenadaVelhaDois + i] == simboloDamaOposto) {
+                        coordenadaInimigo[0] = coordenadaVelhaUm + i;
+                        coordenadaInimigo[1] = coordenadaVelhaDois + i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        tabuleiro[coordenadaInimigo[0]][coordenadaInimigo[1]] = ' ';
         return tabuleiro;
     }
 
@@ -450,7 +493,7 @@ public class Jogo {
 
         inserirJogadasPossiveis(tabuleiroHipotetico, jogadasPossiveis, simboloPossivel);
         tabuleiroHipotetico[coordenadaUm][coordenadaDois] = simboloSelecionado;
-        mostrarTabuleiro(tabuleiroHipotetico);
+        Tabuleiros.mostrarTabuleiro(tabuleiroHipotetico);
         mostrarCoordenadasJogaveis(jogadasPossiveis);
 
         return obterJogada(jogadasPossiveis);
@@ -964,8 +1007,8 @@ public class Jogo {
         char[][] tabuleiroHipotetico = copiarTabuleiro(tabuleiro);
         tabuleiroHipotetico[coordenadaVelha[0]][coordenadaVelha[1]] = simboloJogadorSelecionado;
         inserirJogadasPossiveis(tabuleiroHipotetico, jogadasPossiveis, simboloPossivel);
-        mostrarTabuleiro(tabuleiroHipotetico);
-        int[] coordenadaNova = escolherJogadaObrigatoria(tabuleiro, simboloJogador, coordenadaVelha, jogadasPossiveis);
+        Tabuleiros.mostrarTabuleiro(tabuleiroHipotetico);
+        int[] coordenadaNova = escolherJogadaObrigatoria(jogadasPossiveis);
 
         int[][] jogadaObrigatoria = {coordenadaVelha, coordenadaNova};
         return jogadaObrigatoria;
@@ -1022,7 +1065,7 @@ public class Jogo {
         return jogadasObrigatoriasFormatado;
     }
 
-    public static int[] escolherJogadaObrigatoria(char[][] tabuleiro, char simboloJogador, int[] coordenadaVelha, int[][] jogadasObrigatorias) {
+    public static int[] escolherJogadaObrigatoria(int[][] jogadasObrigatorias) {
         System.out.print("Você pode jogar nessas coordenadas com essa peça: ");
         for (int i = 0; i < jogadasObrigatorias.length; i++) {
             System.out.printf("%s ", Main.obterCoordenadaEmTexto(jogadasObrigatorias[i]));

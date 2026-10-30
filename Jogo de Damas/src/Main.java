@@ -11,7 +11,7 @@ public class Main {
     }
 
     public static void iniciarPartida() {
-        char[][] tabuleiro = Jogo.iniciarTabuleiro();
+        char[][] tabuleiro = Tabuleiros.iniciarTabuleiro();
         int jogadorAtual = random.nextInt(1, 3);
         boolean partidaTerminou = false;
 
