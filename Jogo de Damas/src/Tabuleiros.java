@@ -117,9 +117,9 @@ public class Tabuleiros {
                 }
             }
         }
+        int jogadorAtual = random.nextInt(1, 3);
         do {
             int[] coordenadaEscolhida = new int[2];
-            int jogadorAtual = random.nextInt(1, 3);
             int coordenadaSorteada = random.nextInt(0, coordenadasValidas.size());
             switch (jogadorAtual) {
                 case 1:
@@ -137,6 +137,7 @@ public class Tabuleiros {
                     }
                     coordenadasValidas.remove(coordenadaSorteada);
                     pecasJogadorUm--;
+                    jogadorAtual++;
                     break;
                 case 2:
                     coordenadaEscolhida[0] = coordenadasValidas.get(coordenadaSorteada)[0];
@@ -153,6 +154,7 @@ public class Tabuleiros {
                     }
                     coordenadasValidas.remove(coordenadaSorteada);
                     pecasJogadorDois--;
+                    jogadorAtual--;
                     break;
 
                 default:
@@ -164,7 +166,7 @@ public class Tabuleiros {
 
         // Como algumas peças podem ter sidos geradas no final do tabuleiro, precisamos converte-las em damas
         for (int linha = 0; linha < 8; linha += 7) {
-            for (int coluna = 0; coluna < 7; coluna++) {
+            for (int coluna = 0; coluna < 8; coluna++) {
                 if (linha == 0) {
                     if (tabuleiro[linha][coluna] == '○') {
                         tabuleiro[linha][coluna] = '◓';

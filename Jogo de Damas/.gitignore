@@ -28,7 +28,3 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-
-/Placar.txt
-/Replays.txt
-/.idea/

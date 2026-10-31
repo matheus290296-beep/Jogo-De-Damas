@@ -3,8 +3,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-// TO-DO: Verificação de integridade dos replays
-
 public class Arquivos {
     static Path caminhoPlacar = Path.of("Placar.txt");
     static Path caminhoReplays = Path.of("Replays.txt");
@@ -85,6 +83,15 @@ public class Arquivos {
     public static void gravarReplay(String replay) throws IOException {
         List<String> linhas = Files.readAllLines(caminhoReplays);
         linhas.add(replay);
-        Files.writeString(caminhoReplays, replay);
+        Files.write(caminhoReplays, linhas);
+    }
+
+    public static String[] obterReplays() throws IOException {
+        List<String> linhas = Files.readAllLines(caminhoReplays);
+        String[] replays = new String[linhas.size()];
+        for (int linha = 0; linha < linhas.size(); linha++) {
+            replays[linha] = linhas.get(linha);
+        }
+        return replays;
     }
 }

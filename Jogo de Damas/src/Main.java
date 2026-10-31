@@ -1,8 +1,6 @@
 import java.io.IOException;
 import java.util.Random;
 
-// TO-DO: Classe Tabuleiros terá um static com o tabuleiro do jogo, e ela que passará a gerencia-lo, ao invés do Main
-
 public class Main {
     static Random random = new Random();
     static boolean debugging = false;
