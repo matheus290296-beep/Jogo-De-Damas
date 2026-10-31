@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class Replays {
+    static boolean debugging = false;
+
     // Essa classe é responsável por gravar e reproduzir replays
     // A interação com o arquivo Replays.txt continuará sendo responsabilidade da classe Arquivos.txt. Não vamos interagir com arquivos nessa classe
 
@@ -38,7 +40,7 @@ public class Replays {
     static String gravacaoPartida = "";
 
     public static void gravarReplay() throws IOException {
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("Gravação da partida após gravarReplay (último método): %s\n", gravacaoPartida);
         }
         Arquivos.gravarReplay(gravacaoPartida);
@@ -59,7 +61,7 @@ public class Replays {
 
         gravacaoPartida = horaFormatada + " - " + dataFormatada + " - ";
 
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("Gravação da partida após iniciarGravacao: %s\n", gravacaoPartida);
         }
     }
@@ -123,8 +125,8 @@ public class Replays {
             }
             gravacaoTabuleiro.append(" ");
         }
-        gravacaoPartida += gravacaoTabuleiro + " - ";
-        if (Main.debugging) {
+        gravacaoPartida += gravacaoTabuleiro + "- ";
+        if (Main.debugging || debugging) {
             System.out.printf("Gravação da partida após gravarTabuleiro: %s\n", gravacaoPartida);
         }
     }
@@ -141,7 +143,7 @@ public class Replays {
         String jogada = "[" + coordenadasDaJogada[0][0] + coordenadasDaJogada[0][1] + "," + coordenadasDaJogada[1][0] + coordenadasDaJogada[1][1];
         gravacaoPartida += jogada;
 
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("Gravação da partida após gravarJogada: %s\n", gravacaoPartida);
         }
     }
@@ -151,7 +153,7 @@ public class Replays {
         if (Character.isDigit(ultimoCaractere)) {
             gravacaoPartida += "]";
         }
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("Gravação da partida após fecharJogadaAnterior: %s\n", gravacaoPartida);
         }
     }
@@ -160,7 +162,7 @@ public class Replays {
         // Por design, uma jogada pode comer apenas uma peça. Isso garante que, toda vez que uma peça é comida, esse metodo é chamado uma vez
         String gravacao = "." + pecaComida[0] + pecaComida[1] + "]";
         gravacaoPartida += gravacao;
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("Gravação da partida após gravarPecaComida: %s\n", gravacaoPartida);
         }
     }
@@ -184,8 +186,8 @@ public class Replays {
             System.out.println("Erro 9");
             System.exit(9);
         }
-        gravacaoPartida += codigo + "- ";
-        if (Main.debugging) {
+        gravacaoPartida += codigo + " - ";
+        if (Main.debugging || debugging) {
             System.out.printf("Gravação da partida após gravarQuemComecou: %s\n", gravacaoPartida);
         }
     }
@@ -218,7 +220,7 @@ public class Replays {
 
         String gravacao = " - " + codigoVencedor;
         gravacaoPartida += gravacao;
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("Gravação da partida após gravarQuemGanhou: %s\n", gravacaoPartida);
         }
 
@@ -302,7 +304,7 @@ public class Replays {
 
     public static String obterData(String replay) {
         String data = replay.substring(0, 9);
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("(Replays) Data encontrada: %s\n", data);
         }
         return data;
@@ -310,7 +312,7 @@ public class Replays {
 
     public static String obterHorario(String replay) {
         String horario = replay.substring(11, 22);
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("(Replays) Horário encontrado: %s\n", horario);
         }
         return horario;
@@ -342,7 +344,7 @@ public class Replays {
     }
 
     public static char esteChar(char peca) {
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("(Replays) Método esteChar recebeu este caractere: %s\n", peca);
         }
         if (Character.getNumericValue(peca) == 0) {
@@ -368,7 +370,7 @@ public class Replays {
     }
 
     public static String obterJogadorInicial(String replay) {
-        String jogadorInicial = replay.substring(67, 69);
+        String jogadorInicial = replay.substring(66, 68);
         if (jogadorInicial.equals("JO")) {
             return "Você";
         }
@@ -382,7 +384,7 @@ public class Replays {
             return "o Jogador Dois";
         }
         else {
-            System.out.println("Erro 13");
+            System.out.printf("(Replays) Erro 13. Valor analisado: %s\n", jogadorInicial);
             System.exit(13);
             return " ";
         }
@@ -390,7 +392,7 @@ public class Replays {
 
     public static String obterVencedor(String replay) {
         String vencedor = replay.substring(replay.length() - 2);
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("(Replays) O método obterVencedor recebeu %s e está lendo %s\n", replay, vencedor);
         }
         if (vencedor.equals("JO")) {
@@ -422,7 +424,7 @@ public class Replays {
         String[] cadaJogada = jogadas.split("]");
         int[][][] todasAsJogadas = new int[cadaJogada.length][][];
         for (int jogada = 0; jogada < cadaJogada.length; jogada++) {
-            if (Main.debugging) {
+            if (Main.debugging || debugging) {
                 System.out.printf("(Replays) Analisando essa jogada: %s]\n", cadaJogada[jogada]);
             }
             if (cadaJogada[jogada].length() == 6) {
@@ -433,7 +435,7 @@ public class Replays {
                 todasAsJogadas[jogada][0][1] = cadaJogada[jogada].charAt(2) - '0';
                 todasAsJogadas[jogada][1][0] = cadaJogada[jogada].charAt(4) - '0';
                 todasAsJogadas[jogada][1][1] = cadaJogada[jogada].charAt(5) - '0';
-                if (Main.debugging) {
+                if (Main.debugging || debugging) {
                     System.out.printf("(Replays) Encontrei essa jogada: %s\n", Arrays.deepToString(todasAsJogadas[jogada]));
                 }
 
@@ -446,7 +448,7 @@ public class Replays {
                 todasAsJogadas[jogada][1][1] = cadaJogada[jogada].charAt(5) - '0';
                 todasAsJogadas[jogada][2][0] = cadaJogada[jogada].charAt(7) - '0';
                 todasAsJogadas[jogada][2][1] = cadaJogada[jogada].charAt(8) - '0';
-                if (Main.debugging) {
+                if (Main.debugging || debugging) {
                     System.out.printf("(Replays) Encontrei essa jogada: %s\n", Arrays.deepToString(todasAsJogadas[jogada]));
                 }
             }

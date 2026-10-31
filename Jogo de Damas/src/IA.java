@@ -2,6 +2,7 @@ import java.util.Random;
 
 public class IA {
     static Random random = new Random();
+    static boolean debugging = false;
 
     public static char[][] fazerJogadaIA(char[][] tabuleiro, char simboloJogador) throws InterruptedException {
         // 1a implementação de IA
@@ -19,8 +20,8 @@ public class IA {
             int[] coordenadaVelha = jogadasObrigatorias[pecaAJogar][0];
             char simboloAJogar = tabuleiro[coordenadaVelha[0]][coordenadaVelha[1]];
             int[] coordenadaNova = jogadasObrigatorias[pecaAJogar][jogadaDessaPeca];
-            Jogo.apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
             Replays.gravarJogada(new int[][]{coordenadaVelha, coordenadaNova});
+            Jogo.apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
             Jogo.inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
 
             while(true) {

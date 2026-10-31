@@ -6,6 +6,7 @@ import java.util.List;
 public class Arquivos {
     static Path caminhoPlacar = Path.of("Placar.txt");
     static Path caminhoReplays = Path.of("Replays.txt");
+    static boolean debugging = false;
 
     public static void garantirIntegridade() throws IOException {
         if (!Files.exists(caminhoPlacar)) {

@@ -7,10 +7,10 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         Arquivos.garantirIntegridade();
-        int tabuleiroTipo = 0;
+        int tabuleiroTipo = 1;
 
         while (true) {
-            int escolha = mostrarMenu();
+            int escolha = Menus.mostrarMenuPrincipal();
             switch (escolha) {
                 case 1:
                     Replays.iniciarGravacao();
@@ -23,7 +23,7 @@ public class Main {
                     break;
 
                 case 3:
-                    tabuleiroTipo = alterarTabuleiroInicial();
+                    tabuleiroTipo = Menus.alterarTabuleiroInicial();
                     break;
 
                 case 4:
@@ -39,11 +39,11 @@ public class Main {
                     System.exit(0);
 
                 case 0:
-                    debugging = !debugging;
+                    Menus.menuDebugging();
                     break;
 
                 default:
-                    System.out.println("Erro 6");
+                    System.out.println("(Main) Erro 6");
                     System.exit(6);
             }
         }
@@ -76,7 +76,7 @@ public class Main {
                     break;
 
                 default:
-                    System.out.println("Erro 1");
+                    System.out.println("(Main) Erro 1");
                     System.exit(1);
             }
             quemGanhou = Jogo.verificarSePartidaTerminou(tabuleiro, simboloJogadorAtual);
@@ -93,33 +93,5 @@ public class Main {
         int coordenadaUm = coordenadas[0];
         int coordenadaDois = coordenadas[1];
         return ("" + coordenadaUmPossiveis[coordenadaUm] + coordenadaDoisPossiveis[coordenadaDois]);
-    }
-
-    public static int mostrarMenu() {
-        System.out.println("====== JOGO DE DAMAS ======");
-            System.out.println("1 - Jogar contra uma Pessoa");
-            System.out.println("2 - Jogar contra uma IA");
-            System.out.println("3 - Escolher tabuleiro");
-            System.out.println("4 - Mostrar Placar");
-            System.out.println("5 - Reproduzir Replays");
-            System.out.println("6 - Sair");
-            return ValidadorInput.obterInt(0, 6);
-    }
-
-    public static int alterarTabuleiroInicial() {
-        System.out.println("====== MENU DE ESCOLHA DE TABULEIROS =====");
-        System.out.println("1 - Tabuleiro normal");
-        System.out.println("2 - Tabuleiro só com damas");
-        System.out.println("3 - Tabuleiro gerado aleatoriamente");
-        System.out.println("4 - Tabuleiro gerado aleatoriamente (CAOS)");
-        if (debugging) {
-            System.out.println("\n=========== DEBUGGING ===========");
-            System.out.println("5 - Tabuleiro de jogo normal, prestes à virar dama");
-            System.out.println("6 - Tabuleiro prestes à comer várias peças");
-            System.out.println("7 - Tabuleiro prestes à comer várias peças - versão dama");
-            System.out.println("8 - Tabuleiro com alguem prestes a vencer");
-            return ValidadorInput.obterInt(1, 8);
-        }
-        return ValidadorInput.obterInt(1, 4);
     }
 }

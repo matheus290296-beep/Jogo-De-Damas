@@ -2,6 +2,8 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 public class Jogo {
+    static boolean debugging = false;
+
     public static char[][] jogadaJogador(char[][] tabuleiro, char simboloJogador) {
         Tabuleiros.mostrarTabuleiro(tabuleiro);
         char simboloAJogar;
@@ -21,8 +23,8 @@ public class Jogo {
             coordenadaVelha = jogadaObrigatoria[0];
             coordenadaNova = jogadaObrigatoria[1];
             simboloAJogar = tabuleiro[coordenadaVelha[0]][coordenadaVelha[1]];
-            tabuleiro = apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
             Replays.gravarJogada(new int[][]{coordenadaVelha, coordenadaNova});
+            tabuleiro = apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
             inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
             // Se uma peça que acabou de comer ainda pode comer mais, ela continua realizando jogadas obrigatórias em loop
             while (comeuPeca) {
@@ -58,13 +60,13 @@ public class Jogo {
         }
 
         if (ehPecaNormal(tabuleiro, coordenadaVelha)) {
-            if (Main.debugging) {
+            if (Main.debugging || debugging) {
                 System.out.printf("Peça nas coordenadas %d %d não é dama!\n", coordenadaVelha[0], coordenadaVelha[1]);
             }
             simboloAJogar = simboloJogador;
             coordenadaNova = escolherCoordenadaAJogar(tabuleiro, coordenadaVelha, simboloAJogar);
         } else {
-            if (Main.debugging) {
+            if (Main.debugging || debugging) {
                 System.out.printf("Peça nas coordenadas %d %d é dama!\n", coordenadaVelha[0], coordenadaVelha[1]);
             }
             simboloAJogar = obterSimboloDama(simboloJogador);
@@ -131,7 +133,7 @@ public class Jogo {
         int coordenadaNovaUm = coordenadaNova[0];
         int coordenavaNovaDois = coordenadaNova[1];
 
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("Simbolo a jogar: %s\n", simboloAJogar);
             System.out.printf("Coordenadas selecionadas: %d %d\n", coordenadaVelha[0], coordenadaVelha[1]);
             System.out.printf("Jogando coordenadas %d %d\n", coordenadaNovaUm, coordenavaNovaDois);
@@ -191,7 +193,7 @@ public class Jogo {
         int coordenadaUm = coordenadasDaPecaSelecionada[0];
         int coordenadaDois = coordenadasDaPecaSelecionada[1];
 
-        if (Main.debugging) {
+        if (Main.debugging|| debugging) {
             System.out.printf("Estou procurando jogadas possiveis nas coordenadas %d %d\n", coordenadaUm, coordenadaDois);
         }
 
@@ -272,7 +274,7 @@ public class Jogo {
             }
         }
 
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("Quantidade de jogadas possíveis encontradas da peça nas coordenadas %d %d: %d\n", coordenadaUm, coordenadaDois, jogadasPossiveis.size());
             System.out.printf("Essas são as coordenadas encontradas: %s\n", Arrays.deepToString(jogadasPossiveis.toArray()));
         }
@@ -282,7 +284,7 @@ public class Jogo {
         ;
         for (int i = 0; i < jogadasPossiveis.size(); i++) {
             jogadasPossiveisFormatada[i] = jogadasPossiveis.get(i);
-            if (Main.debugging) {
+            if (Main.debugging || debugging) {
                 System.out.printf("Jogada possível %d: %d %d\n", i, jogadasPossiveisFormatada[i][0], jogadasPossiveisFormatada[i][1]);
             }
         }
@@ -522,7 +524,7 @@ public class Jogo {
         char simboloDamaJogador = obterSimboloDama(simboloJogador);
         char simboloDamaOposto = obterSimboloDamaOposto(simboloJogador);
 
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("Meu simbolo: %s\nMinha dama: %s\nSeu simbolo: %s\nSua dama: %s\n", simboloJogador, simboloDamaJogador, simboloOposto, simboloDamaOposto);
         }
 
@@ -633,7 +635,7 @@ public class Jogo {
             }
         }
 
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("Encontrei estas jogadas possiveis: %s\n", Arrays.deepToString(jogadasPossiveis.toArray()));
         }
 
@@ -642,7 +644,7 @@ public class Jogo {
         for (int i = 0; i < jogadasPossiveis.size(); i++) {
             jogadasPossiveisFormatada[i][0] = jogadasPossiveis.get(i)[0];
             jogadasPossiveisFormatada[i][1] = jogadasPossiveis.get(i)[1];
-            if (Main.debugging) {
+            if (Main.debugging || debugging) {
                 System.out.printf("Encontrei uma jogada possivel na coordenada %d %d\n", jogadasPossiveisFormatada[i][0], jogadasPossiveisFormatada[i][1]);
             }
         }
@@ -768,7 +770,7 @@ public class Jogo {
                     if (tabuleiro[coordenadaUm + 1][coordenadaDois - 1] == simboloJogadorOposto
                             || tabuleiro[coordenadaUm + 1][coordenadaDois - 1] == simboloDamaJogadorOposto) {
                         if (tabuleiro[coordenadaUm + 2][coordenadaDois - 2] == ' ') {
-                            if (Main.debugging) {
+                            if (Main.debugging || debugging) {
                                 System.out.printf("Encontrei um oponente que posso comer nas coordenadas %d %d!\n", (coordenadaUm + 1), (coordenadaDois - 1));
                                 System.out.printf("Minha coordenada é: %d %d\n", coordenadaAtual[0], coordenadaAtual[1]);
                             }
@@ -782,7 +784,7 @@ public class Jogo {
                     if (tabuleiro[coordenadaUm + 1][coordenadaDois + 1] == simboloJogadorOposto
                             || tabuleiro[coordenadaUm + 1][coordenadaDois + 1] == simboloDamaJogadorOposto) {
                         if (tabuleiro[coordenadaUm + 2][coordenadaDois + 2] == ' ') {
-                            if (Main.debugging) {
+                            if (Main.debugging || debugging) {
                                 System.out.printf("Encontrei um oponente que posso comer nas coordenadas %d %d!\n", (coordenadaUm + 1), (coordenadaDois + 1));
                                 System.out.printf("Minha coordenada é: %d %d\n", coordenadaAtual[0], coordenadaAtual[1]);
                             }
@@ -799,7 +801,7 @@ public class Jogo {
                     if (tabuleiro[coordenadaUm - 1][coordenadaDois - 1] == simboloJogadorOposto
                             || tabuleiro[coordenadaUm - 1][coordenadaDois - 1] == simboloDamaJogadorOposto) {
                         if (tabuleiro[coordenadaUm - 2][coordenadaDois - 2] == ' ') {
-                            if (Main.debugging) {
+                            if (Main.debugging || debugging) {
                                 System.out.printf("Encontrei um oponente que posso comer nas coordenadas %d %d!\n", (coordenadaUm - 1), (coordenadaDois - 1));
                                 System.out.printf("Minha coordenada é: %d %d\n", coordenadaAtual[0], coordenadaAtual[1]);
                             }
@@ -813,7 +815,7 @@ public class Jogo {
                     if (tabuleiro[coordenadaUm - 1][coordenadaDois + 1] == simboloJogadorOposto
                             || tabuleiro[coordenadaUm - 1][coordenadaDois + 1] == simboloDamaJogadorOposto) {
                         if (tabuleiro[coordenadaUm - 2][coordenadaDois + 2] == ' ') {
-                            if (Main.debugging) {
+                            if (Main.debugging || debugging) {
                                 System.out.printf("Encontrei um oponente que posso comer nas coordenadas %d %d!\n", (coordenadaUm - 1), (coordenadaDois + 1));
                                 System.out.printf("Minha coordenada é: %d %d\n", coordenadaAtual[0], coordenadaAtual[1]);
                             }
@@ -841,7 +843,7 @@ public class Jogo {
                         if (tabuleiro[coordenadaUm - i][coordenadaDois - i] == simboloJogadorOposto
                                 || tabuleiro[coordenadaUm - i][coordenadaDois - i] == simboloDamaJogadorOposto) {
                             if (tabuleiro[coordenadaUm - i - 1][coordenadaDois - i - 1] == ' ') {
-                                if (Main.debugging) {
+                                if (Main.debugging || debugging) {
                                     System.out.printf("Encontrei um oponente que posso comer nas coordenadas %d %d!\n", (coordenadaUm - i - 1), (coordenadaDois - i - 1));
                                     System.out.printf("Minha coordenada é: %d %d\n", coordenadaAtual[0], coordenadaAtual[1]);
                                 }
@@ -883,7 +885,7 @@ public class Jogo {
                         if (tabuleiro[coordenadaUm - i][coordenadaDois + i] == simboloJogadorOposto
                                 || tabuleiro[coordenadaUm - i][coordenadaDois + i] == simboloDamaJogadorOposto) {
                             if (tabuleiro[coordenadaUm - i - 1][coordenadaDois + i + 1] == ' ') {
-                                if (Main.debugging) {
+                                if (Main.debugging || debugging) {
                                     System.out.printf("Encontrei um oponente que posso comer nas coordenadas %d %d!\n", (coordenadaUm - i - 1), (coordenadaDois + i + 1));
                                     System.out.printf("Minha coordenada é: %d %d\n", coordenadaAtual[0], coordenadaAtual[1]);
                                 }
@@ -922,7 +924,7 @@ public class Jogo {
                         if (tabuleiro[coordenadaUm + i][coordenadaDois - i] == simboloJogadorOposto
                                 || tabuleiro[coordenadaUm + i][coordenadaDois - i] == simboloDamaJogadorOposto) {
                             if (tabuleiro[coordenadaUm + i + 1][coordenadaDois - i - 1] == ' ') {
-                                if (Main.debugging) {
+                                if (Main.debugging || debugging) {
                                     System.out.printf("Encontrei um oponente que posso comer nas coordenadas %d %d!\n", (coordenadaUm + i + 1), (coordenadaDois - i - 1));
                                     System.out.printf("Minha coordenada é: %d %d\n", coordenadaAtual[0], coordenadaAtual[1]);
                                 }
@@ -961,7 +963,7 @@ public class Jogo {
                         if (tabuleiro[coordenadaUm + i][coordenadaDois + i] == simboloJogadorOposto
                                 || tabuleiro[coordenadaUm + i][coordenadaDois + i] == simboloDamaJogadorOposto) {
                             if (tabuleiro[coordenadaUm + i + 1][coordenadaDois + i + 1] == ' ') {
-                                if (Main.debugging) {
+                                if (Main.debugging || debugging) {
                                     System.out.printf("Encontrei um oponente que posso comer nas coordenadas %d %d!\n", (coordenadaUm + i + 1), (coordenadaDois + i + 1));
                                     System.out.printf("Minha coordenada é: %d %d\n", coordenadaAtual[0], coordenadaAtual[1]);
                                 }
@@ -991,7 +993,7 @@ public class Jogo {
             }
         }
         if (jogadasObrigatorias.isEmpty()) {
-            if (Main.debugging) {
+            if (Main.debugging || debugging) {
                 System.out.printf("Não encontrei peças com jogadas obrigatórias para a peça %d %d!\n", coordenadaAtual[0], coordenadaAtual[1]);
             }
             return new int[0][];
@@ -1067,7 +1069,7 @@ public class Jogo {
             }
         }
 
-        if (Main.debugging) {
+        if (Main.debugging || debugging) {
             System.out.printf("Encontrei essas coordenadas para uma jogada obrigatória: %s\n", Arrays.deepToString(jogadasObrigatoriasDessaPeca.toArray()));
         }
 

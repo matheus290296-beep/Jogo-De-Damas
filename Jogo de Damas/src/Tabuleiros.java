@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Tabuleiros {
+    static boolean debugging = false;
+
     public static char[][] obterTabuleiro(int escolha) {
         char[][] tabuleiro = new char[8][8];
         switch (escolha) {
