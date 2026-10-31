@@ -122,17 +122,20 @@ public class Tabuleiros {
                 return tabuleiro;
 
             case 10:
-                return gerarTabuleiroAleatorio();
+                return gerarTabuleiroAleatorio("normal");
 
             case 11:
                 return iniciarTabuleiro();
+
+            case 12:
+                return gerarTabuleiroAleatorio("caos");
 
             default:
                 return iniciarTabuleiro();
         }
     }
 
-    public static char[][] gerarTabuleiroAleatorio() {
+    public static char[][] gerarTabuleiroAleatorio(String tipo) {
         Random random = new Random();
         char[][] tabuleiro = gerarTabuleiroVazio();
 
@@ -166,14 +169,36 @@ public class Tabuleiros {
                 case 1:
                     coordenadaEscolhida[0] = coordenadasValidas.get(coordenadaSorteada)[0];
                     coordenadaEscolhida[1] = coordenadasValidas.get(coordenadaSorteada)[1];
-                    tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '□';
+                    if (tipo.contentEquals("caos")) {
+                        int chanceCaos = random.nextInt(0, 100);
+                        if (chanceCaos > 85) {
+                            tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '⊠';
+                        }
+                        else {
+                            tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '□';
+                        }
+                    }
+                    else {
+                        tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '□';
+                    }
                     coordenadasValidas.remove(coordenadaSorteada);
                     pecasJogadorUm--;
                     break;
                 case 2:
                     coordenadaEscolhida[0] = coordenadasValidas.get(coordenadaSorteada)[0];
                     coordenadaEscolhida[1] = coordenadasValidas.get(coordenadaSorteada)[1];
-                    tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '○';
+                    if (tipo.contentEquals("caos")) {
+                        int chanceCaos = random.nextInt(0, 100);
+                        if (chanceCaos > 85) {
+                            tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '◓';
+                        }
+                        else {
+                            tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '○';
+                        }
+                    }
+                    else {
+                        tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '○';
+                    }
                     coordenadasValidas.remove(coordenadaSorteada);
                     pecasJogadorDois--;
                     break;
@@ -184,6 +209,22 @@ public class Tabuleiros {
             }
 
         } while (pecasJogadorUm > 0 || pecasJogadorDois > 0);
+
+        // Como algumas peças podem ter sidos geradas no final do tabuleiro, precisamos converte-las em damas
+        for (int linha = 0; linha < 8; linha+= 7) {
+            for (int coluna = 0; coluna < 7; coluna++) {
+                if (linha == 0) {
+                    if (tabuleiro[linha][coluna] == '○') {
+                        tabuleiro[linha][coluna] = '◓';
+                    }
+                }
+                if (linha == 7) {
+                    if (tabuleiro[linha][coluna] == '□') {
+                        tabuleiro[linha][coluna] = '⊠';
+                    }
+                }
+            }
+        }
 
         return tabuleiro;
     }

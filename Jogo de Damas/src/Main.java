@@ -2,28 +2,57 @@ import java.util.Random;
 
 public class Main {
     static Random random = new Random();
-    static boolean debugging = true;
+    static boolean debugging = false;
 
-    public static void main(String[] args) {
-        do {
-            iniciarPartida();
-        } while (continuarJogando());
+    public static void main(String[] args) throws InterruptedException {
+        while (true) {
+            int escolha = mostrarMenu();
+            switch (escolha) {
+                case 1:
+                    iniciarPartida("multiplayer");
+                    break;
+
+                case 2:
+                    iniciarPartida("singleplayer");
+                    break;
+
+                case 3:
+                    System.out.println("Saindo . . .");
+                    System.exit(0);
+
+                case 0:
+                    debugging = !debugging;
+                    break;
+
+                default:
+                    System.out.println("Erro 6");
+                    System.exit(6);
+            }
+        }
     }
 
-    public static void iniciarPartida() {
+    public static void iniciarPartida(String modo) throws InterruptedException {
         char[][] tabuleiro = Tabuleiros.iniciarTabuleiro();
         int jogadorAtual = random.nextInt(1, 3);
         boolean partidaTerminou = false;
 
         do {
+            char simboloJogadorAtual = ' ';
             switch (jogadorAtual) {
                 case 1:
-                    tabuleiro = Jogo.jogadaJogador(tabuleiro, '□');
+                    simboloJogadorAtual = '□';
+                    tabuleiro = Jogo.jogadaJogador(tabuleiro, simboloJogadorAtual);
                     jogadorAtual++;
                     break;
 
                 case 2:
-                    tabuleiro = Jogo.jogadaJogador(tabuleiro, '○');
+                    simboloJogadorAtual = '○';
+                    if (modo.contentEquals("multiplayer")) {
+                        tabuleiro = Jogo.jogadaJogador(tabuleiro, simboloJogadorAtual);
+                    }
+                    else {
+                        tabuleiro = IA.fazerJogadaIA(tabuleiro, simboloJogadorAtual);
+                    }
                     jogadorAtual--;
                     break;
 
@@ -31,7 +60,7 @@ public class Main {
                     System.out.println("Erro 1");
                     System.exit(1);
             }
-            partidaTerminou = Jogo.verificarSePartidaTerminou(tabuleiro);
+            partidaTerminou = Jogo.verificarSePartidaTerminou(tabuleiro, simboloJogadorAtual);
         } while (!partidaTerminou);
     }
 
@@ -49,5 +78,13 @@ public class Main {
         System.out.println("2 - Não");
         int escolha = ValidadorInput.obterInt(1, 2);
         return escolha == 1;
+    }
+
+    public static int mostrarMenu() {
+        System.out.println("====== JOGO DE DAMAS ======");
+            System.out.println("1 - Jogar contra uma Pessoa");
+            System.out.println("2 - Jogar contra uma IA");
+            System.out.println("3 - Sair");
+            return ValidadorInput.obterInt(0, 3);
     }
 }

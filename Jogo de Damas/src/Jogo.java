@@ -68,10 +68,6 @@ public class Jogo {
             simboloAJogar = obterSimboloDama(simboloJogador);
             coordenadaNova = escolherCoordenadaAJogarDama(tabuleiro, coordenadaVelha, simboloAJogar);
         }
-        if (comeuPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova)) {
-            tabuleiro = apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
-        }
-
         return inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
     }
 
@@ -148,7 +144,27 @@ public class Jogo {
         return tabuleiro;
     }
 
-    public static boolean verificarSePartidaTerminou(char[][] tabuleiro) {
+    public static boolean verificarSePartidaTerminou(char[][] tabuleiro, char jogadorAtual) {
+        if (jogadorAtual != '□' && jogadorAtual != '○') {
+            System.out.println("Erro 7");
+            System.exit(7);
+        }
+
+        int[][][] todasJogadasPossiveis = obterTodasJogadasPossiveis(tabuleiro, jogadorAtual);
+        if (todasJogadasPossiveis.length == 0) {
+            int[][][] jogadasPossiveisOponente = obterTodasJogadasPossiveis(tabuleiro, obterSimboloOposto(jogadorAtual));
+            if (jogadasPossiveisOponente.length == 0) {
+                System.out.println("Não há jogadas válidas para nenhum dos jogadores!");
+                System.out.println("Deu empate!");
+                return true;
+            }
+            else {
+                System.out.println("Você não possui jogadas válidas!");
+                System.out.println("Você perdeu!");
+                return true;
+            }
+        }
+
         // Verifica se um dos jogadores não tem mais peças no tabuleiro
         int pecasJogadorUm = 0;
         int pecasJogadorDois = 0;
@@ -320,6 +336,7 @@ public class Jogo {
     }
 
     public static boolean comeuPecaInimigo(char[][] tabuleiro, int[] coordenadaVelha, int[] coordenadaNova) {
+        // Esse metodo se tornou obsoleto após melhoria de lógica, mas continuará aqui caso uma hora precise
         int coordenadaUm;
         int coordenadaDois;
         if (coordenadaVelha[0] > coordenadaNova[0]) {
@@ -1081,5 +1098,56 @@ public class Jogo {
             }
             System.out.println("Coordenada inválida! Você precisa comer uma peça do inimigo!");
         }
+    }
+
+    public static int[][][] obterTodasJogadasPossiveis(char[][] tabuleiro, char simboloJogador) {
+        // Muito como o obterJogadasObrigatorias, esse metodo precisa criar uma lista de listas de jogadas possíveis. Só que dessa vez, sem as regras de jogada obrigatória
+        char simboloDamaJogador = obterSimboloDama(simboloJogador);
+        ArrayList<ArrayList<int[]>> jogadasObrigatorias = new ArrayList<>();
+
+        for (int linha = 0; linha < 8; linha++) {
+            for (int coluna = 0; coluna < 8; coluna++) {
+                int[] coordenadasAtuais = {linha, coluna};
+                ArrayList<int[]> jogadasPossiveisPecaAtual = new ArrayList<int[]>();
+                // Para peças normais
+                if (tabuleiro[linha][coluna] == simboloJogador) {
+                    int[][] jogadasPossiveis = obterJogadasPossiveis(tabuleiro, coordenadasAtuais, simboloJogador);
+                    if (jogadasPossiveis.length > 0) {
+                        jogadasPossiveisPecaAtual.add(coordenadasAtuais);
+                        for (int i = 0; i < jogadasPossiveis.length; i++) {
+                            jogadasPossiveisPecaAtual.add(jogadasPossiveis[i]);
+                        }
+                    }
+                }
+                // Para damas
+                else if (tabuleiro[linha][coluna] == simboloDamaJogador) {
+                    int[][] jogadasPossiveis = obterJogadasPossiveisDama(tabuleiro, coordenadasAtuais, simboloJogador);
+                    if (jogadasPossiveis.length > 0) {
+                        jogadasPossiveisPecaAtual.add(coordenadasAtuais);
+                        for (int i = 0; i < jogadasPossiveis.length; i++) {
+                            jogadasPossiveisPecaAtual.add(jogadasPossiveis[i]);
+                        }
+                    }
+                }
+                if (!jogadasPossiveisPecaAtual.isEmpty()) {
+                    jogadasObrigatorias.add(jogadasPossiveisPecaAtual);
+                }
+            }
+        }
+
+        if (jogadasObrigatorias.isEmpty()) {
+            return new int[0][][];
+        }
+
+        int quantidadeDePecasComJogadas = jogadasObrigatorias.size();
+        int[][][] jogadasObrigatoriasFormatadas = new int[quantidadeDePecasComJogadas][][];
+        for (int i = 0; i < quantidadeDePecasComJogadas; i++) {
+            int quantidadeDeJogadasDessaPeca = jogadasObrigatorias.get(i).size();
+            jogadasObrigatoriasFormatadas[i] = new int[quantidadeDeJogadasDessaPeca][2];
+            for (int j = 0; j < quantidadeDeJogadasDessaPeca; j++) {
+                jogadasObrigatoriasFormatadas[i][j] = jogadasObrigatorias.get(i).get(j);
+            }
+        }
+        return jogadasObrigatoriasFormatadas;
     }
 }

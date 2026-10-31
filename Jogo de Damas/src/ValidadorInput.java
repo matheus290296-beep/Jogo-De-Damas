@@ -68,7 +68,8 @@ public class ValidadorInput {
         System.out.println("9 - Tabuleiro prestes à comer várias peças - versão dama");
         System.out.println("10 - Tabuleiro gerado aleatoriamente");
         System.out.println("11 - Tabuleiro normal");
-        int escolha = obterInt(1, 11);
+        System.out.println("12 - Tabuleiro gerado aleatoriamente (CAOS)");
+        int escolha = obterInt(1, 12);
         return Tabuleiros.obterTabuleiro(escolha);
     }
 }
