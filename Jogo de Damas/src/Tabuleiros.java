@@ -5,7 +5,33 @@ public class Tabuleiros {
     public static char[][] obterTabuleiro(int escolha) {
         char[][] tabuleiro = new char[8][8];
         switch (escolha) {
-            case 1: {
+
+            case 1:
+                tabuleiro = iniciarTabuleiro();
+                break;
+
+            case 2:
+                tabuleiro = new char[][]{
+                        {' ', '⊠', ' ', '⊠', ' ', '⊠', ' ', '⊠'},
+                        {'⊠', ' ', '⊠', ' ', '⊠', ' ', '⊠', ' '},
+                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                        {' ', '◓', ' ', '◓', ' ', '◓', ' ', '◓'},
+                        {'◓', ' ', '◓', ' ', '◓', ' ', '◓', ' '}
+                };
+                break;
+
+            case 3:
+                tabuleiro = gerarTabuleiroAleatorio("normal");
+                break;
+
+            case 4:
+                tabuleiro = gerarTabuleiroAleatorio("caos");
+                break;
+
+            case 5: {
                 tabuleiro = new char[][]{
                         {' ', ' ', ' ', ' ', ' ', '□', ' ', '□'},
                         {' ', ' ', '○', ' ', '□', ' ', '□', ' '},
@@ -16,87 +42,11 @@ public class Tabuleiros {
                         {' ', '□', ' ', '○', ' ', ' ', ' ', '○'},
                         {' ', ' ', ' ', ' ', '○', ' ', '○', ' '}
                 };
-                return tabuleiro;
+                break;
             }
-            case 2:
-                tabuleiro = new char[][] {
-                        {' ', '⊠', ' ', '⊠', ' ', '⊠', ' ', '⊠'},
-                        {'⊠', ' ', '⊠', ' ', '⊠', ' ', '⊠', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', '◓', ' ', '◓', ' ', '◓', ' ', '◓'},
-                        {'◓', ' ', '◓', ' ', '◓', ' ', '◓', ' '}
-                };
-                return tabuleiro;
-
-            case 3:
-                tabuleiro = new char[][] {
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', '⊠', ' ', ' ', ' '},
-                        {' ', ' ', ' ', '⊠', ' ', ' ', ' ', ' '},
-                        {' ', ' ', '◓', ' ', ' ', ' ', ' ', ' '},
-                        {' ', '◓', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
-                };
-                return tabuleiro;
-
-            case 4:
-                tabuleiro = new char[][] {
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', '⊠', ' ', ' ', ' '},
-                        {' ', ' ', ' ', '⊠', ' ', ' ', ' ', ' '},
-                        {' ', ' ', '○', ' ', ' ', ' ', ' ', ' '},
-                        {' ', '○', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
-                };
-                return tabuleiro;
-            case 5:
-                tabuleiro = new char[][] {
-                        {' ', '□', ' ', '□', ' ', '□', ' ', '□'},
-                        {'□', ' ', '□', ' ', '□', ' ', '□', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', '○', ' ', '○', ' ', '○', ' ', '○'},
-                        {'○', ' ', '○', ' ', '○', ' ', '○', ' '}
-                };
-                return tabuleiro;
 
             case 6:
-                tabuleiro = new char[][] {
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', '□', ' '},
-                        {' ', ' ', ' ', ' ', ' ', '□', ' ', ' '},
-                        {' ', ' ', ' ', ' ', '◓', ' ', ' ', ' '},
-                        {' ', ' ', ' ', '◓', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
-                };
-                return tabuleiro;
-
-            case 7:
-                tabuleiro = new char[][] {
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', '□', ' ', ' '},
-                        {' ', ' ', ' ', ' ', '◓', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
-                };
-                return tabuleiro;
-
-            case 8:
-                tabuleiro = new char[][] {
+                tabuleiro = new char[][]{
                         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
                         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
                         {' ', '□', ' ', '□', ' ', ' ', ' ', ' '},
@@ -106,10 +56,10 @@ public class Tabuleiros {
                         {' ', '□', ' ', ' ', ' ', ' ', ' ', ' '},
                         {'○', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
                 };
-                return tabuleiro;
+                break;
 
-            case 9:
-                tabuleiro = new char[][] {
+            case 7:
+                tabuleiro = new char[][]{
                         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
                         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
                         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -119,20 +69,27 @@ public class Tabuleiros {
                         {' ', '⊠', ' ', ' ', ' ', '⊠', ' ', ' '},
                         {'◓', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
                 };
-                return tabuleiro;
+                break;
 
-            case 10:
-                return gerarTabuleiroAleatorio("normal");
-
-            case 11:
-                return iniciarTabuleiro();
-
-            case 12:
-                return gerarTabuleiroAleatorio("caos");
+            case 8:
+                tabuleiro = new char[][]{
+                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                        {' ', ' ', ' ', ' ', '◓', ' ', ' ', ' '},
+                        {' ', ' ', ' ', '⊠', ' ', ' ', ' ', ' '},
+                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
+                };
+                break;
 
             default:
-                return iniciarTabuleiro();
+                System.out.println("Erro 9");
+                System.exit(9);
         }
+        Replays.gravarTabuleiro(tabuleiro);
+        return tabuleiro;
     }
 
     public static char[][] gerarTabuleiroAleatorio(String tipo) {
@@ -152,8 +109,7 @@ public class Tabuleiros {
                         int[] coordenadas = {linha, coluna};
                         coordenadasValidas.add(coordenadas);
                     }
-                }
-                else {
+                } else {
                     if (coluna == 0 || coluna == 2 || coluna == 4 || coluna == 6) {
                         int[] coordenadas = {linha, coluna};
                         coordenadasValidas.add(coordenadas);
@@ -173,12 +129,10 @@ public class Tabuleiros {
                         int chanceCaos = random.nextInt(0, 100);
                         if (chanceCaos > 85) {
                             tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '⊠';
-                        }
-                        else {
+                        } else {
                             tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '□';
                         }
-                    }
-                    else {
+                    } else {
                         tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '□';
                     }
                     coordenadasValidas.remove(coordenadaSorteada);
@@ -191,12 +145,10 @@ public class Tabuleiros {
                         int chanceCaos = random.nextInt(0, 100);
                         if (chanceCaos > 85) {
                             tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '◓';
-                        }
-                        else {
+                        } else {
                             tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '○';
                         }
-                    }
-                    else {
+                    } else {
                         tabuleiro[coordenadaEscolhida[0]][coordenadaEscolhida[1]] = '○';
                     }
                     coordenadasValidas.remove(coordenadaSorteada);
@@ -211,7 +163,7 @@ public class Tabuleiros {
         } while (pecasJogadorUm > 0 || pecasJogadorDois > 0);
 
         // Como algumas peças podem ter sidos geradas no final do tabuleiro, precisamos converte-las em damas
-        for (int linha = 0; linha < 8; linha+= 7) {
+        for (int linha = 0; linha < 8; linha += 7) {
             for (int coluna = 0; coluna < 7; coluna++) {
                 if (linha == 0) {
                     if (tabuleiro[linha][coluna] == '○') {
@@ -231,9 +183,6 @@ public class Tabuleiros {
 
     public static char[][] iniciarTabuleiro() {
         char[][] tabuleiro = new char[8][8];
-        if (Main.debugging) {
-            return ValidadorInput.obterTabuleiro();
-        }
         tabuleiro = gerarTabuleiroVazio();
 
         for (int linha = 0; linha < 8; linha++) {

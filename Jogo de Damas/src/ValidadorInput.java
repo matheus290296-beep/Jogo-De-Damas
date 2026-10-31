@@ -53,23 +53,4 @@ public class ValidadorInput {
             }
         }
     }
-
-    public static char[][] obterTabuleiro() {
-        char[][] tabuleiro = new char[8][8];
-        System.out.println("=========== DEBUGGING ===========");
-        System.out.println("1 - Tabuleiro de jogo normal, prestes à virar dama");
-        System.out.println("2 - Tabuleiro só com damas");
-        System.out.println("3 - 2 damas contra 2 damas");
-        System.out.println("4 - 2 damas player 1 vs 2 normais player 2");
-        System.out.println("5 - Tabuleiro normal com 2 linhas de cada jogador");
-        System.out.println("6 - 2 normais player 1 vs 2 damas player 2");
-        System.out.println("7 - Tabuleiro com alguem prestes a vencer");
-        System.out.println("8 - Tabuleiro prestes à comer várias peças");
-        System.out.println("9 - Tabuleiro prestes à comer várias peças - versão dama");
-        System.out.println("10 - Tabuleiro gerado aleatoriamente");
-        System.out.println("11 - Tabuleiro normal");
-        System.out.println("12 - Tabuleiro gerado aleatoriamente (CAOS)");
-        int escolha = obterInt(1, 12);
-        return Tabuleiros.obterTabuleiro(escolha);
-    }
 }

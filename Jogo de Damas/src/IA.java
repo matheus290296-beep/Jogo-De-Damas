@@ -15,20 +15,22 @@ public class IA {
         if (jogadasObrigatorias.length > 0) {
             boolean comeuPeca = true;
             int pecaAJogar = random.nextInt(0, jogadasObrigatorias.length);
-            int jogadaDesaPeca = random.nextInt(0, jogadasObrigatorias[pecaAJogar].length);
+            int jogadaDessaPeca = random.nextInt(0, jogadasObrigatorias[pecaAJogar].length);
             int[] coordenadaVelha = jogadasObrigatorias[pecaAJogar][0];
             char simboloAJogar = tabuleiro[coordenadaVelha[0]][coordenadaVelha[1]];
-            int[] coordenadaNova = jogadasObrigatorias[pecaAJogar][jogadaDesaPeca];
+            int[] coordenadaNova = jogadasObrigatorias[pecaAJogar][jogadaDessaPeca];
             Jogo.apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
+            Replays.gravarJogada(new int[][]{coordenadaVelha, coordenadaNova});
             Jogo.inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
 
-            while(comeuPeca) {
+            while(true) {
                 int[][] jogadasObrigatoriasNovas = Jogo.jogadasObrigatoriasDaPeca(tabuleiro, simboloJogador, coordenadaNova);
                 if (jogadasObrigatoriasNovas.length > 0) {
                     int jogadaNovaEscolhida = random.nextInt(0, jogadasObrigatoriasNovas.length);
                     coordenadaVelha = coordenadaNova.clone();
                     coordenadaNova = jogadasObrigatoriasNovas[jogadaNovaEscolhida];
                     Jogo.apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
+                    Replays.gravarJogada(new int[][]{coordenadaVelha, coordenadaNova});
                     Jogo.inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
                 }
                 else {
@@ -57,6 +59,7 @@ public class IA {
         int[] coordenadaVelha = todasJogadasPossiveis[pecaEscolhida][0];
         char simboloAJogar = tabuleiro[coordenadaVelha[0]][coordenadaVelha[1]];
         int[] coordenadaNova = todasJogadasPossiveis[pecaEscolhida][jogadaEscolhidaIndex];
+        Replays.gravarJogada(new int[][]{coordenadaVelha, coordenadaNova});
         Jogo.inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
 
         System.out.println("(IA) Pensando . . .");

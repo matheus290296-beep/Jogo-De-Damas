@@ -22,6 +22,7 @@ public class Jogo {
             coordenadaNova = jogadaObrigatoria[1];
             simboloAJogar = tabuleiro[coordenadaVelha[0]][coordenadaVelha[1]];
             tabuleiro = apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
+            Replays.gravarJogada(new int[][]{coordenadaVelha, coordenadaNova});
             inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
             // Se uma peça que acabou de comer ainda pode comer mais, ela continua realizando jogadas obrigatórias em loop
             while (comeuPeca) {
@@ -36,6 +37,7 @@ public class Jogo {
                     coordenadaVelha = coordenadaNova.clone();
                     coordenadaNova = escolherJogadaObrigatoria(jogadasObrigatoriasNovas);
                     tabuleiro = apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
+                    Replays.gravarJogada(new int[][]{coordenadaVelha, coordenadaNova});
                     inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
                 }
                 else {
@@ -68,6 +70,7 @@ public class Jogo {
             simboloAJogar = obterSimboloDama(simboloJogador);
             coordenadaNova = escolherCoordenadaAJogarDama(tabuleiro, coordenadaVelha, simboloAJogar);
         }
+        Replays.gravarJogada(new int[][]{coordenadaVelha, coordenadaNova});
         return inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
     }
 
@@ -144,40 +147,33 @@ public class Jogo {
         return tabuleiro;
     }
 
-    public static boolean verificarSePartidaTerminou(char[][] tabuleiro, char jogadorAtual) {
+    public static String verificarSePartidaTerminou(char[][] tabuleiro, char jogadorAtual) {
         if (jogadorAtual != '□' && jogadorAtual != '○') {
             System.out.println("Erro 7");
             System.exit(7);
         }
+        char jogadorOposto = obterSimboloOposto(jogadorAtual);
 
         int[][][] todasJogadasPossiveis = obterTodasJogadasPossiveis(tabuleiro, jogadorAtual);
+        int[][][] jogadasPossiveisOponente = obterTodasJogadasPossiveis(tabuleiro, obterSimboloOposto(jogadorAtual));
         if (todasJogadasPossiveis.length == 0) {
-            int[][][] jogadasPossiveisOponente = obterTodasJogadasPossiveis(tabuleiro, obterSimboloOposto(jogadorAtual));
             if (jogadasPossiveisOponente.length == 0) {
                 System.out.println("Não há jogadas válidas para nenhum dos jogadores!");
                 System.out.println("Deu empate!");
-                return true;
-            }
-            else {
+                return "empate";
+            } else {
                 System.out.println("Você não possui jogadas válidas!");
                 System.out.println("Você perdeu!");
-                return true;
+                return "" + jogadorOposto;
             }
+        }
+        if (jogadasPossiveisOponente.length == 0) {
+            System.out.println("Seu oponente não possui jogadas válidas!");
+            System.out.println("Você venceu!");
+            return "" + jogadorAtual;
         }
 
-        // Verifica se um dos jogadores não tem mais peças no tabuleiro
-        int pecasJogadorUm = 0;
-        int pecasJogadorDois = 0;
-        for (int linha = 0; linha < 8; linha++) {
-            for (int coluna = 0; coluna < 8; coluna++) {
-                if (tabuleiro[linha][coluna] == '□' || tabuleiro[linha][coluna] == '⊠') {
-                    pecasJogadorUm++;
-                } else if (tabuleiro[linha][coluna] == '○' || tabuleiro[linha][coluna] == '◓') {
-                    pecasJogadorDois++;
-                }
-            }
-        }
-        return (pecasJogadorUm == 0 || pecasJogadorDois == 0);
+        return " ";
     }
 
     public static char[][] copiarTabuleiro(char[][] tabuleiro) {
@@ -452,7 +448,7 @@ public class Jogo {
                 }
             }
         }
-
+        Replays.gravarPecaComida(coordenadaInimigo);
         tabuleiro[coordenadaInimigo[0]][coordenadaInimigo[1]] = ' ';
         return tabuleiro;
     }
