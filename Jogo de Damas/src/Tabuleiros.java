@@ -4,12 +4,13 @@ import java.util.Random;
 public class Tabuleiros {
     static boolean debugging = false;
 
-    public static char[][] obterTabuleiro(int escolha) {
-        char[][] tabuleiro = new char[8][8];
-        switch (escolha) {
+    public static char[][] tabuleiro = new char[8][8];
+    public static char[][] tabuleiroHipotetico = new char[8][8];
 
+    public static void iniciarTabuleiro(int escolha) {
+        switch (escolha) {
             case 1:
-                tabuleiro = iniciarTabuleiro();
+                gerarTabuleiroBasico();
                 break;
 
             case 2:
@@ -26,11 +27,11 @@ public class Tabuleiros {
                 break;
 
             case 3:
-                tabuleiro = gerarTabuleiroAleatorio("normal");
+                gerarTabuleiroAleatorio("normal");
                 break;
 
             case 4:
-                tabuleiro = gerarTabuleiroAleatorio("caos");
+                gerarTabuleiroAleatorio("caos");
                 break;
 
             case 5: {
@@ -91,12 +92,10 @@ public class Tabuleiros {
                 System.exit(9);
         }
         Replays.gravarTabuleiro(tabuleiro);
-        return tabuleiro;
     }
 
-    public static char[][] gerarTabuleiroAleatorio(String tipo) {
-        Random random = new Random();
-        char[][] tabuleiro = gerarTabuleiroVazio();
+    public static void gerarTabuleiroAleatorio(String tipo) {
+        Random random = new Random();;
 
         System.out.println("Quantas peças para cada jogador devo gerar?");
         int pecasPraCadaJogador = ValidadorInput.obterInt(1, 12);
@@ -181,14 +180,10 @@ public class Tabuleiros {
                 }
             }
         }
-
-        return tabuleiro;
     }
 
-    public static char[][] iniciarTabuleiro() {
-        char[][] tabuleiro = new char[8][8];
+    public static void gerarTabuleiroBasico() {
         tabuleiro = gerarTabuleiroVazio();
-
         for (int linha = 0; linha < 8; linha++) {
             for (int coluna = 0; coluna < 8; coluna++) {
                 if (linha == 0 || linha == 2) {
@@ -210,11 +205,10 @@ public class Tabuleiros {
                 }
             }
         }
-        return tabuleiro;
     }
 
-    public static void mostrarTabuleiro(char[][] tabuleiro) {
-        System.out.println("\n====== TABULEIRO =====");
+    public static void mostrarTabuleiro() {
+        System.out.println("\n====== TABULEIRO ======");
         System.out.println("   A B C D E F G H");
         for (int linha = 0; linha < 8; linha++) {
             System.out.printf("%d  ", linha + 1);
@@ -235,5 +229,41 @@ public class Tabuleiros {
             }
         }
         return tabuleiro;
+    }
+
+    public static void criarTabuleiroHipotetico() {
+        for (int linha = 0; linha < 8; linha++) {
+            for (int coluna = 0; coluna < 8; coluna++) {
+                tabuleiroHipotetico[linha][coluna] = tabuleiro[linha][coluna];
+            }
+        }
+    }
+
+    public static void mostrarTabuleiroReplays(char[][] tabuleiroReplays) {
+        System.out.println("\n====== REPLAY ======");
+        System.out.println("   A B C D E F G H");
+        for (int linha = 0; linha < 8; linha++) {
+            System.out.printf("%d  ", linha + 1);
+            for (int coluna = 0; coluna < 8; coluna++) {
+                System.out.printf("%s ", tabuleiroReplays[linha][coluna]);
+            }
+            System.out.printf(" %d", linha + 1);
+            System.out.println();
+        }
+        System.out.println("   A B C D E F G H");
+    }
+
+    public static void mostrarTabuleiroHipotetico() {
+        System.out.println("\n====== TABULEIRO ======");
+        System.out.println("   A B C D E F G H");
+        for (int linha = 0; linha < 8; linha++) {
+            System.out.printf("%d  ", linha + 1);
+            for (int coluna = 0; coluna < 8; coluna++) {
+                System.out.printf("%s ", tabuleiroHipotetico[linha][coluna]);
+            }
+            System.out.printf(" %d", linha + 1);
+            System.out.println();
+        }
+        System.out.println("   A B C D E F G H");
     }
 }

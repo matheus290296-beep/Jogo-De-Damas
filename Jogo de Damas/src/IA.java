@@ -4,71 +4,45 @@ public class IA {
     static Random random = new Random();
     static boolean debugging = false;
 
-    public static char[][] fazerJogadaIA(char[][] tabuleiro, char simboloJogador) throws InterruptedException {
-        // 1a implementação de IA
+    static int[][][][] todasAsJogadasPossiveis;
+
+    // È atualizado pelo Analises.obterTodasAsJogadasPossiveis
+    static boolean ehJogadaObrigatoria = false;
+
+    public static void jogadaIA(char jogador) throws InterruptedException {
+        // 1a implementação de IA. De início, apenas joga aleatoriamente
         // Mais pra frente, tentarei adicionar mais inteligência às decisões da IA
+        System.out.println("Agora é a vez da IA!");
 
-        // Se existem jogadas obrigatórias, escolhe uma aleatoriamente e a faz
-        // Se não existem jogadas obrigatórias, escolhe uma jogada possível aleatória
-
-        // Primeiro: Caso existam jogadas obrigatórias
-        int[][][] jogadasObrigatorias = Jogo.obterJogadasObrigatorias(tabuleiro, simboloJogador);
-        if (jogadasObrigatorias.length > 0) {
-            boolean comeuPeca = true;
-            int pecaAJogar = random.nextInt(0, jogadasObrigatorias.length);
-            int jogadaDessaPeca = random.nextInt(0, jogadasObrigatorias[pecaAJogar].length);
-            int[] coordenadaVelha = jogadasObrigatorias[pecaAJogar][0];
-            char simboloAJogar = tabuleiro[coordenadaVelha[0]][coordenadaVelha[1]];
-            int[] coordenadaNova = jogadasObrigatorias[pecaAJogar][jogadaDessaPeca];
-            Replays.gravarJogada(new int[][]{coordenadaVelha, coordenadaNova});
-            Jogo.apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
-            Jogo.inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
-
-            while(true) {
-                int[][] jogadasObrigatoriasNovas = Jogo.jogadasObrigatoriasDaPeca(tabuleiro, simboloJogador, coordenadaNova);
-                if (jogadasObrigatoriasNovas.length > 0) {
-                    int jogadaNovaEscolhida = random.nextInt(0, jogadasObrigatoriasNovas.length);
-                    coordenadaVelha = coordenadaNova.clone();
-                    coordenadaNova = jogadasObrigatoriasNovas[jogadaNovaEscolhida];
-                    Jogo.apagarPecaInimigo(tabuleiro, coordenadaVelha, coordenadaNova, simboloJogador);
-                    Replays.gravarJogada(new int[][]{coordenadaVelha, coordenadaNova});
-                    Jogo.inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
-                }
-                else {
-                    break;
-                }
-            }
-            System.out.println("(IA) Pensando . . .");
-            Thread.sleep(1500);
-            System.out.printf("(IA) Eu vou jogar com a peça nas coordenadas %s para a posição %s!\n",
-                    Main.obterCoordenadaEmTexto(coordenadaVelha), Main.obterCoordenadaEmTexto(coordenadaNova));
-            Thread.sleep(1000);
-            return tabuleiro;
+        todasAsJogadasPossiveis = Analises.obterTodasAsJogadasPossiveis(jogador);
+        if (todasAsJogadasPossiveis.length == 0) {
+            Jogo.quemGanhou = "J1";
+            return;
         }
 
-        // Segundo: Caso não existam jogadas obrigatórias
-        // Vamos depois adicionar esse metodo no Jogo, e fazer a mesma verificação da possibilidade de haver 0 jogadas por lá também
-        int[][][] todasJogadasPossiveis = Jogo.obterTodasJogadasPossiveis(tabuleiro, simboloJogador);
-        int jogadasPossiveisQuantidade = todasJogadasPossiveis.length;
-        if (jogadasPossiveisQuantidade == 0) {
-            System.out.println("(IA) Não há jogadas possíveis para mim! Passando o turno à frente. . .");
-            return tabuleiro;
-        }
-        int pecaEscolhida = random.nextInt(0, jogadasPossiveisQuantidade);
-        // Como a posição 0 do int[][] das jogadas possiveis é a própria coordenada da peça, usamos random.nextInt começando em 1
-        int jogadaEscolhidaIndex = random.nextInt(1, todasJogadasPossiveis[pecaEscolhida].length);
-        int[] coordenadaVelha = todasJogadasPossiveis[pecaEscolhida][0];
-        char simboloAJogar = tabuleiro[coordenadaVelha[0]][coordenadaVelha[1]];
-        int[] coordenadaNova = todasJogadasPossiveis[pecaEscolhida][jogadaEscolhidaIndex];
-        Replays.gravarJogada(new int[][]{coordenadaVelha, coordenadaNova});
-        Jogo.inserirJogada(tabuleiro, coordenadaVelha, coordenadaNova, simboloAJogar, simboloJogador);
+        int pecaEscolhida = random.nextInt(0, todasAsJogadasPossiveis.length);
+        int jogadaEscolhida = random.nextInt(0, todasAsJogadasPossiveis[pecaEscolhida].length);
+        int[] peca = todasAsJogadasPossiveis[pecaEscolhida][jogadaEscolhida][0];
+        int[][] jogada = todasAsJogadasPossiveis[pecaEscolhida][jogadaEscolhida];
 
         System.out.println("(IA) Pensando . . .");
         Thread.sleep(1500);
-        System.out.printf("(IA) Eu vou jogar com a peça nas coordenadas %s para a posição %s!\n",
-                Main.obterCoordenadaEmTexto(coordenadaVelha), Main.obterCoordenadaEmTexto(coordenadaNova));
-        Thread.sleep(1000);
 
-        return tabuleiro;
+        Replays.gravarJogada(jogada);
+        Jogo.realizarJogada(jogada, jogador);
+
+        while (ehJogadaObrigatoria) {
+            System.out.println("(IA) Eu posso capturar mais peças! Pensando . . .");
+            Thread.sleep(1000);
+
+            peca = jogada[1];
+            int[][][] jogadasDeCapturaMultipla = Analises.obterJogadasDeCapturaMultipla(jogador, peca);
+            if (jogadasDeCapturaMultipla.length > 0) {
+                jogadaEscolhida = random.nextInt(0, jogadasDeCapturaMultipla.length);
+                jogada = jogadasDeCapturaMultipla[jogadaEscolhida];
+                Replays.gravarJogada(jogada);
+                Jogo.realizarJogada(jogada, jogador);
+            }
+        }
     }
 }

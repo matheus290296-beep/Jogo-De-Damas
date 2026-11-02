@@ -242,7 +242,7 @@ public class Replays {
         }
         String data = obterData(replay);
         String horario = obterHorario(replay);
-        char[][] tabuleiro = obterTabuleiro(replay);
+        char[][] tabuleiroReplays = obterTabuleiro(replay);
         String jogadorInicial = obterJogadorInicial(replay);
         String vencedor = obterVencedor(replay);
 
@@ -250,7 +250,7 @@ public class Replays {
         System.out.println("Pressione enter para iniciar o replay . . .");
         ValidadorInput.scanner.nextLine();
 
-        Tabuleiros.mostrarTabuleiro(tabuleiro);
+        Tabuleiros.mostrarTabuleiroReplays(tabuleiroReplays);
         System.out.printf("A partida começou com %s!\n", jogadorInicial);
         System.out.println("Pressione enter para realizar a primeira jogada do replay . . .");
         ValidadorInput.scanner.nextLine();
@@ -261,19 +261,19 @@ public class Replays {
             // Primeiro array é a coordenada da peça. Segundo array, coordenada pra onde essa peça foi
             // Se existir um terceiro array, é a coordenada da peça que ela comeu
             int[][] jogada = jogadas[i];
-            char pecaJogada = tabuleiro[jogada[0][0]][jogada[0][1]];
-            tabuleiro[jogada[0][0]][jogada[0][1]] = ' ';
-            tabuleiro[jogada[1][0]][jogada[1][1]] = pecaJogada;
+            char pecaJogada = tabuleiroReplays[jogada[0][0]][jogada[0][1]];
+            tabuleiroReplays[jogada[0][0]][jogada[0][1]] = ' ';
+            tabuleiroReplays[jogada[1][0]][jogada[1][1]] = pecaJogada;
             if (jogada.length == 3) {
-                tabuleiro[jogada[2][0]][jogada[2][1]] = ' ';
+                tabuleiroReplays[jogada[2][0]][jogada[2][1]] = ' ';
                 System.out.printf("A peça das coordenadas %s comeu a peça das coordenadas %s e foi para %s!!\n",
-                        Main.obterCoordenadaEmTexto(jogada[0]), Main.obterCoordenadaEmTexto(jogada[2]), Main.obterCoordenadaEmTexto(jogada[1]));
+                        Analises.obterCoordenadaEmTexto(jogada[0]), Analises.obterCoordenadaEmTexto(jogada[2]), Analises.obterCoordenadaEmTexto(jogada[1]));
             }
             else {
                 System.out.printf("A peça das coordenadas %s foi para as coordenadas %s!\n",
-                        Main.obterCoordenadaEmTexto(jogada[0]), Main.obterCoordenadaEmTexto(jogada[1]));
+                        Analises.obterCoordenadaEmTexto(jogada[0]), Analises.obterCoordenadaEmTexto(jogada[1]));
             }
-            Tabuleiros.mostrarTabuleiro(tabuleiro);
+            Tabuleiros.mostrarTabuleiroReplays(tabuleiroReplays);
             System.out.println("Pressione enter para seguir com o replay . . .");
             ValidadorInput.scanner.nextLine();
         }
@@ -298,7 +298,7 @@ public class Replays {
 
     public static boolean verificarIntegridade(String replay) {
         // TO-DO: Verificar integridade dos replays antes de roda-lo
-        // Não só deve verificar a estrutura do replay, mas também se suas jogadas fazem sentido
+        // Não só deve verificar a estrutura do replay, mas também se suas jogadas e seus dados fazem sentido
         return true;
     }
 

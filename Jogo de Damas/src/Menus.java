@@ -35,6 +35,7 @@ public class Menus {
         String jogoDebugging;
         String replaysDebugging;
         String tabuleirosDebugging;
+        String analisesDebugging;
         while (true) {
             if (Main.debugging) {
                 mainDebugging = "Desativar o debugging do Main";
@@ -66,6 +67,11 @@ public class Menus {
             } else {
                 tabuleirosDebugging = "Ativar o debugging de Tabuleiros";
             }
+            if (Analises.debugging) {
+                analisesDebugging = "Desativar o debugging de Tabuleiros";
+            } else {
+                analisesDebugging = "Ativar o debugging de Tabuleiros";
+            }
 
             System.out.println("===== MENU DE DEBUGGING =====");
             System.out.printf("1 - %s\n", mainDebugging);
@@ -74,6 +80,7 @@ public class Menus {
             System.out.printf("4 - %s\n", jogoDebugging);
             System.out.printf("5 - %s\n", replaysDebugging);
             System.out.printf("6 - %s\n", tabuleirosDebugging);
+            System.out.printf("7 - %s\n", analisesDebugging);
             System.out.println("0 - Voltar");
             int escolha = ValidadorInput.obterInt(0, 6);
 
@@ -104,6 +111,9 @@ public class Menus {
                 case 6:
                     Tabuleiros.debugging = !Tabuleiros.debugging;
                     break;
+
+                case 7:
+                    Analises.debugging = !Analises.debugging;
 
                 default:
                     System.out.println("Erro 17");
