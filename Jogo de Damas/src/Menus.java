@@ -69,9 +69,9 @@ public class Menus {
                 tabuleirosDebugging = "Ativar o debugging de Tabuleiros";
             }
             if (Analises.debugging) {
-                analisesDebugging = "Desativar o debugging de Tabuleiros";
+                analisesDebugging = "Desativar o debugging de Analises";
             } else {
-                analisesDebugging = "Ativar o debugging de Tabuleiros";
+                analisesDebugging = "Ativar o debugging de Analises";
             }
             if (Jogador.debugging) {
                 jogadorDebugging = "Desativar o debugging de Jogador";
@@ -133,5 +133,19 @@ public class Menus {
                     return;
             }
         }
+    }
+
+    public static int obterDificuldade() {
+        System.out.println("===== Escolha a dificuldade da sua IA =====");
+        System.out.println("1 - Fácil");
+        System.out.println("2 - Médio");
+        System.out.println("3 - Difícil");
+        int escolha = ValidadorInput.obterInt(1, 3);
+        return switch (escolha) {
+            case 1 -> 2;
+            case 2 -> 5;
+            case 3 -> 8;
+            default -> 2;
+        };
     }
 }

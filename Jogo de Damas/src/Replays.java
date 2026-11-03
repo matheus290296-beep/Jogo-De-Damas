@@ -17,17 +17,17 @@ public class Replays {
 
     // O estado inicial do tabuleiro estará dentro do ()
     // A informação será formatada dessa forma: 0123 2340 3401 4012 0123 234 3401 4012
-    // São 8 linhas, portanto 8 grupos de 4 dígitos. São 4 coordenadas possiveis por linha, então 4 dígitos por grupo
+    // São 8 linhas, portanto 8 grupos de 4 dígitos. São 4 coordenadas possíveis por linha, então 4 dígitos por grupo
     // 0 significa vazio. 1 significa quadrado. 2 significa circulo. 3 significa quadrado dama. 4 significa circulo dama
 
     // As informações das jogadas individuais estarão dentro dos []
-    // A imformação será formatada dessa forma:
+    // A informação será formatada dessa forma:
     // Cada [] conterá as coordenadas, em dígitos duplos, da peça que está jogando. E em seguida, dígitos duplos da coordenada que jogou.
     // Por fim, mais 2 dígitos duplos caso comeu uma peça inimiga
     // Exemplo: 00,22.11 (peça do 00 foi pra 22 e comeu 11)
     // Caso uma peça vire dama, haverá um .D no final dessa parte da string. Exemplo: [62,71.D]
 
-    // Exemplo de formatação final:  23:29:52 - 30/10/2026 - JO - (1111 1111 0000 0000 0000 0000 2222 2222) - [37,46][64,55][46,67.55][[etc até a última jogada] - IA
+    // Exemplo de formatação final:  23:29:52 - 30/10/2026 - JO - 1111 1111 0000 0000 0000 0000 2222 2222 - [37,46][64,55][46,67.55][[etc até a última jogada] - IA
 
 
     // A classe Main irá chamar o metodo iniciarGravacao a cada nova partida
@@ -193,31 +193,10 @@ public class Replays {
     }
 
     // O símbolo é □ ou ○ ou a String "empate"
-    public static void gravarQuemGanhou(String simboloDeQuemGanhou, String modo) throws IOException {
+    public static void gravarQuemGanhou(String codigoVencedor, String modo) throws IOException {
         // No final desse metodo, devemos chamar o gravarReplay, que então irá chamar o Arquivos para gravar o replay no nosso .txt
         // Assim como o gravarJogada, precisa fechar o [] de uma jogada que não comeu uma peça, caso necessário
         fecharJogadaAnterior();
-        String codigoVencedor = "";
-        if (simboloDeQuemGanhou.equals("□") && modo.equals("singleplayer")) {
-            codigoVencedor = "JO";
-        }
-        else if (simboloDeQuemGanhou.equals("□") && modo.equals("multiplayer")) {
-            codigoVencedor = "J1";
-        }
-        else if (simboloDeQuemGanhou.equals("○") && modo.equals("singleplayer")) {
-            codigoVencedor = "CO";
-        }
-        else if (simboloDeQuemGanhou.equals("○") && modo.equals("multiplayer")) {
-            codigoVencedor = "J2";
-        }
-        else if (simboloDeQuemGanhou.equals("empate")) {
-            codigoVencedor = "EM";
-        }
-        else {
-            System.out.println("Erro 10");
-            System.exit(10);
-        }
-
         String gravacao = " - " + codigoVencedor;
         gravacaoPartida += gravacao;
         if (Main.debugging || debugging) {
@@ -277,7 +256,9 @@ public class Replays {
             System.out.println("Pressione enter para seguir com o replay . . .");
             ValidadorInput.scanner.nextLine();
         }
-        System.out.printf("A partida acabou! Vencedor: %s\n", vencedor);
+        System.out.printf("A partida acabou! Vencedor: %s\n\n", vencedor);
+        System.out.println("Pressione enter para voltar ao Menu Inicial. . .");
+        ValidadorInput.scanner.nextLine();
     }
 
     public static String escolherReplay() throws IOException {
@@ -370,7 +351,7 @@ public class Replays {
     }
 
     public static String obterJogadorInicial(String replay) {
-        String jogadorInicial = replay.substring(66, 68);
+        String jogadorInicial = replay.substring(67, 69);
         if (jogadorInicial.equals("JO")) {
             return "Você";
         }
@@ -420,7 +401,9 @@ public class Replays {
     public static int[][][] obterJogadas(String replay) {
         // Lembrete do formato: [37,46][64,55][46,67.55][[etc até a última jogada]
         // Sendo o "." as coordenadas de uma peça que foi comida
-        String jogadas = replay.substring(71, replay.length() - 6);
+        int inicio = replay.indexOf("[");
+        int fim = replay.lastIndexOf("]");
+        String jogadas = replay.substring(inicio, fim);
         String[] cadaJogada = jogadas.split("]");
         int[][][] todasAsJogadas = new int[cadaJogada.length][][];
         for (int jogada = 0; jogada < cadaJogada.length; jogada++) {

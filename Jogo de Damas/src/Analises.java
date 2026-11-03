@@ -5,6 +5,10 @@ public class Analises {
     static boolean debugging = false;
 
     public static int[][][][] obterTodasAsJogadasPossiveis(char jogador) {
+        return obterTodasAsJogadasPossiveis(jogador, Tabuleiros.tabuleiro);
+    }
+
+    public static int[][][][] obterTodasAsJogadasPossiveis(char jogador, char[][] tabuleiro) {
         // Esse é o metodo principal do Analises. Deve funcionar para os dois jogadores
         // Deve funcionar tanto para jogadas obrigatórias, quanto jogadas normais
         // Caso encontre uma jogada obrigatória, apaga as informações guardadas, e passa a adicionar apenas jogadas obrigatórias
@@ -20,11 +24,11 @@ public class Analises {
         for (int linha = 0; linha < 8; linha++) {
             for (int coluna = 0; coluna < 8; coluna++) {
                 // Aqui vai as regras de peça normal
-                if (Tabuleiros.tabuleiro[linha][coluna] == jogador) {
+                if (tabuleiro[linha][coluna] == jogador) {
                     // Aqui as regras para o jogador um
                     if (jogador == '□') {
                         if (linha < 7 && coluna < 7) {
-                            if (!ehJogadaObrigatoria && Tabuleiros.tabuleiro[linha + 1][coluna + 1] == ' ') {
+                            if (!ehJogadaObrigatoria && tabuleiro[linha + 1][coluna + 1] == ' ') {
                                 int[][] estaJogada = {{linha, coluna}, {linha + 1, coluna + 1}};
                                 jogadasDaPeca.add(estaJogada);
                                 if (Main.debugging || debugging) {
@@ -34,7 +38,7 @@ public class Analises {
                             }
                         }
                         if (linha < 7 && coluna > 0) {
-                            if (!ehJogadaObrigatoria && Tabuleiros.tabuleiro[linha + 1][coluna - 1] == ' ') {
+                            if (!ehJogadaObrigatoria && tabuleiro[linha + 1][coluna - 1] == ' ') {
                                 int[][] estaJogada = {{linha, coluna}, {linha + 1, coluna - 1}};
                                 jogadasDaPeca.add(estaJogada);
                                 if (Main.debugging || debugging) {
@@ -47,7 +51,7 @@ public class Analises {
                     // Aqui as regras para o jogador dois
                     else if (jogador == '○') {
                         if (linha > 0 && coluna < 7) {
-                            if (!ehJogadaObrigatoria && Tabuleiros.tabuleiro[linha - 1][coluna + 1] == ' ') {
+                            if (!ehJogadaObrigatoria && tabuleiro[linha - 1][coluna + 1] == ' ') {
                                 int[][] estaJogada = {{linha, coluna}, {linha - 1, coluna + 1}};
                                 jogadasDaPeca.add(estaJogada);
                                 if (Main.debugging || debugging) {
@@ -57,7 +61,7 @@ public class Analises {
                             }
                         }
                         if (linha > 0 && coluna > 0) {
-                            if (!ehJogadaObrigatoria && Tabuleiros.tabuleiro[linha - 1][coluna - 1] == ' ') {
+                            if (!ehJogadaObrigatoria && tabuleiro[linha - 1][coluna - 1] == ' ') {
                                 int[][] estaJogada = {{linha, coluna}, {linha - 1, coluna - 1}};
                                 jogadasDaPeca.add(estaJogada);
                                 if (Main.debugging || debugging) {
@@ -70,9 +74,9 @@ public class Analises {
 
                     // Aqui para os dois jogadores, caso consiga comer uma peça (frente ou trás)
                     if (linha < 6 && coluna < 6) {
-                        if (Tabuleiros.tabuleiro[linha + 1][coluna + 1] == oponente
-                                || Tabuleiros.tabuleiro[linha + 1][coluna + 1] == damaOponente) {
-                            if (Tabuleiros.tabuleiro[linha + 2][coluna + 2] == ' ') {
+                        if (tabuleiro[linha + 1][coluna + 1] == oponente
+                                || tabuleiro[linha + 1][coluna + 1] == damaOponente) {
+                            if (tabuleiro[linha + 2][coluna + 2] == ' ') {
                                 if (!ehJogadaObrigatoria) {
                                     todasAsJogadas.clear();
                                     jogadasDaPeca.clear();
@@ -90,9 +94,9 @@ public class Analises {
                         }
                     }
                     if (linha < 6 && coluna > 1) {
-                        if (Tabuleiros.tabuleiro[linha + 1][coluna - 1] == oponente
-                                || Tabuleiros.tabuleiro[linha + 1][coluna - 1] == damaOponente) {
-                            if (Tabuleiros.tabuleiro[linha + 2][coluna - 2] == ' ') {
+                        if (tabuleiro[linha + 1][coluna - 1] == oponente
+                                || tabuleiro[linha + 1][coluna - 1] == damaOponente) {
+                            if (tabuleiro[linha + 2][coluna - 2] == ' ') {
                                 if (!ehJogadaObrigatoria) {
                                     todasAsJogadas.clear();
                                     jogadasDaPeca.clear();
@@ -110,9 +114,9 @@ public class Analises {
                         }
                     }
                     if (linha > 1 && coluna < 6) {
-                        if (Tabuleiros.tabuleiro[linha - 1][coluna + 1] == oponente
-                                || Tabuleiros.tabuleiro[linha - 1][coluna + 1] == damaOponente) {
-                            if (Tabuleiros.tabuleiro[linha - 2][coluna + 2] == ' ') {
+                        if (tabuleiro[linha - 1][coluna + 1] == oponente
+                                || tabuleiro[linha - 1][coluna + 1] == damaOponente) {
+                            if (tabuleiro[linha - 2][coluna + 2] == ' ') {
                                 if (!ehJogadaObrigatoria) {
                                     todasAsJogadas.clear();
                                     jogadasDaPeca.clear();
@@ -130,9 +134,9 @@ public class Analises {
                         }
                     }
                     if (linha > 1 && coluna > 1) {
-                        if (Tabuleiros.tabuleiro[linha - 1][coluna - 1] == oponente
-                                || Tabuleiros.tabuleiro[linha - 1][coluna - 1] == damaOponente) {
-                            if (Tabuleiros.tabuleiro[linha - 2][coluna - 2] == ' ') {
+                        if (tabuleiro[linha - 1][coluna - 1] == oponente
+                                || tabuleiro[linha - 1][coluna - 1] == damaOponente) {
+                            if (tabuleiro[linha - 2][coluna - 2] == ' ') {
                                 if (!ehJogadaObrigatoria) {
                                     todasAsJogadas.clear();
                                     jogadasDaPeca.clear();
@@ -152,11 +156,11 @@ public class Analises {
                 }
 
                 // Aqui vai as regras de peças damas
-                else if (Tabuleiros.tabuleiro[linha][coluna] == dama) {
+                else if (tabuleiro[linha][coluna] == dama) {
                     for (int distancia = 1; distancia < 8; distancia++) {
                         // Inferior Direita
                         if (linha + distancia < 8 && coluna + distancia < 8) {
-                            if (!ehJogadaObrigatoria && Tabuleiros.tabuleiro[linha + distancia][coluna + distancia] == ' ') {
+                            if (!ehJogadaObrigatoria && tabuleiro[linha + distancia][coluna + distancia] == ' ') {
                                 int[][] estaJogada = {{linha, coluna}, {linha + distancia, coluna + distancia}};
                                 jogadasDaPeca.add(estaJogada);
                                 if (Main.debugging || debugging) {
@@ -165,11 +169,11 @@ public class Analises {
                                             obterCoordenadaEmTexto(new int[]{linha + distancia, coluna + distancia}));
                                 }
                             }
-                            if (Tabuleiros.tabuleiro[linha + distancia][coluna + distancia] == oponente
-                                    || Tabuleiros.tabuleiro[linha + distancia][coluna + distancia] == damaOponente) {
+                            if (tabuleiro[linha + distancia][coluna + distancia] == oponente
+                                    || tabuleiro[linha + distancia][coluna + distancia] == damaOponente) {
                                 for (int alcance = 1; alcance < 7; alcance++) {
                                     if (linha + distancia + alcance < 8 && coluna + distancia + alcance < 8) {
-                                        if (Tabuleiros.tabuleiro[linha + distancia + alcance][coluna + distancia + alcance] == ' ') {
+                                        if (tabuleiro[linha + distancia + alcance][coluna + distancia + alcance] == ' ') {
                                             if (!ehJogadaObrigatoria) {
                                                 todasAsJogadas.clear();
                                                 jogadasDaPeca.clear();
@@ -196,13 +200,15 @@ public class Analises {
                                 break;
                             }
                             // Isso roda caso encontramos uma de nossas peças no meio do caminho
-                            else if (Tabuleiros.tabuleiro[linha + distancia][coluna + distancia] != ' ') {
+                            else if (tabuleiro[linha + distancia][coluna + distancia] != ' ') {
                                 break;
                             }
                         }
+                    }
+                    for (int distancia = 1; distancia < 8; distancia++) {
                         // Inferior Esquerda
                         if (linha + distancia < 8 && coluna - distancia >= 0) {
-                            if (!ehJogadaObrigatoria && Tabuleiros.tabuleiro[linha + distancia][coluna - distancia] == ' ') {
+                            if (!ehJogadaObrigatoria && tabuleiro[linha + distancia][coluna - distancia] == ' ') {
                                 int[][] estaJogada = {{linha, coluna}, {linha + distancia, coluna - distancia}};
                                 jogadasDaPeca.add(estaJogada);
                                 if (Main.debugging || debugging) {
@@ -211,11 +217,11 @@ public class Analises {
                                             obterCoordenadaEmTexto(new int[]{linha + distancia, coluna - distancia}));
                                 }
                             }
-                            if (Tabuleiros.tabuleiro[linha + distancia][coluna - distancia] == oponente
-                                    || Tabuleiros.tabuleiro[linha + distancia][coluna - distancia] == damaOponente) {
+                            if (tabuleiro[linha + distancia][coluna - distancia] == oponente
+                                    || tabuleiro[linha + distancia][coluna - distancia] == damaOponente) {
                                 for (int alcance = 1; alcance < 7; alcance++) {
                                     if (linha + distancia + alcance < 8 && coluna - distancia - alcance >= 0) {
-                                        if (Tabuleiros.tabuleiro[linha + distancia + alcance][coluna - distancia - alcance] == ' ') {
+                                        if (tabuleiro[linha + distancia + alcance][coluna - distancia - alcance] == ' ') {
                                             if (!ehJogadaObrigatoria) {
                                                 todasAsJogadas.clear();
                                                 jogadasDaPeca.clear();
@@ -239,14 +245,15 @@ public class Analises {
                                     }
                                 }
                                 break;
-                            }
-                            else if (Tabuleiros.tabuleiro[linha + distancia][coluna - distancia] != ' ') {
+                            } else if (tabuleiro[linha + distancia][coluna - distancia] != ' ') {
                                 break;
                             }
                         }
+                    }
+                    for (int distancia = 1; distancia < 8; distancia++) {
                         // Superior Direita
                         if (linha - distancia >= 0 && coluna + distancia < 8) {
-                            if (!ehJogadaObrigatoria && Tabuleiros.tabuleiro[linha - distancia][coluna + distancia] == ' ') {
+                            if (!ehJogadaObrigatoria && tabuleiro[linha - distancia][coluna + distancia] == ' ') {
                                 int[][] estaJogada = {{linha, coluna}, {linha - distancia, coluna + distancia}};
                                 jogadasDaPeca.add(estaJogada);
                                 if (Main.debugging || debugging) {
@@ -255,11 +262,11 @@ public class Analises {
                                             obterCoordenadaEmTexto(new int[]{linha - distancia, coluna + distancia}));
                                 }
                             }
-                            if (Tabuleiros.tabuleiro[linha - distancia][coluna + distancia] == oponente
-                                    || Tabuleiros.tabuleiro[linha - distancia][coluna + distancia] == damaOponente) {
+                            if (tabuleiro[linha - distancia][coluna + distancia] == oponente
+                                    || tabuleiro[linha - distancia][coluna + distancia] == damaOponente) {
                                 for (int alcance = 1; alcance < 7; alcance++) {
                                     if (linha - distancia - alcance >= 0 && coluna + distancia + alcance < 8) {
-                                        if (Tabuleiros.tabuleiro[linha - distancia - alcance][coluna + distancia + alcance] == ' ') {
+                                        if (tabuleiro[linha - distancia - alcance][coluna + distancia + alcance] == ' ') {
                                             if (!ehJogadaObrigatoria) {
                                                 todasAsJogadas.clear();
                                                 jogadasDaPeca.clear();
@@ -283,14 +290,15 @@ public class Analises {
                                     }
                                 }
                                 break;
-                            }
-                            else if (Tabuleiros.tabuleiro[linha - distancia][coluna + distancia] != ' ') {
+                            } else if (tabuleiro[linha - distancia][coluna + distancia] != ' ') {
                                 break;
                             }
                         }
+                    }
+                    for (int distancia = 1; distancia < 8; distancia++) {
                         // Superior Esquerda
                         if (linha - distancia >= 0 && coluna - distancia >= 0) {
-                            if (!ehJogadaObrigatoria && Tabuleiros.tabuleiro[linha - distancia][coluna - distancia] == ' ') {
+                            if (!ehJogadaObrigatoria && tabuleiro[linha - distancia][coluna - distancia] == ' ') {
                                 int[][] estaJogada = {{linha, coluna}, {linha - distancia, coluna - distancia}};
                                 jogadasDaPeca.add(estaJogada);
                                 if (Main.debugging || debugging) {
@@ -299,11 +307,11 @@ public class Analises {
                                             obterCoordenadaEmTexto(new int[]{linha - distancia, coluna - distancia}));
                                 }
                             }
-                            if (Tabuleiros.tabuleiro[linha - distancia][coluna - distancia] == oponente
-                                    || Tabuleiros.tabuleiro[linha - distancia][coluna - distancia] == damaOponente) {
+                            if (tabuleiro[linha - distancia][coluna - distancia] == oponente
+                                    || tabuleiro[linha - distancia][coluna - distancia] == damaOponente) {
                                 for (int alcance = 1; alcance < 7; alcance++) {
                                     if (linha - distancia - alcance >= 0 && coluna - distancia - alcance >= 0) {
-                                        if (Tabuleiros.tabuleiro[linha - distancia - alcance][coluna - distancia - alcance] == ' ') {
+                                        if (tabuleiro[linha - distancia - alcance][coluna - distancia - alcance] == ' ') {
                                             if (!ehJogadaObrigatoria) {
                                                 todasAsJogadas.clear();
                                                 jogadasDaPeca.clear();
@@ -327,8 +335,7 @@ public class Analises {
                                     }
                                 }
                                 break;
-                            }
-                            else if (Tabuleiros.tabuleiro[linha - distancia][coluna - distancia] != ' ') {
+                            } else if (tabuleiro[linha - distancia][coluna - distancia] != ' ') {
                                 break;
                             }
                         }
@@ -340,11 +347,12 @@ public class Analises {
                 }
             }
         }
-        if (Main.modoDeJogo.equals("multiplayer") || jogador == '□') {
-            Jogador.ehJogadaObrigatoria = ehJogadaObrigatoria;
-        }
-        else {
-            IA.ehJogadaObrigatoria = ehJogadaObrigatoria;
+        if (ehPartidaReal(tabuleiro)) {
+            if (Main.modoDeJogo.equals("multiplayer") || jogador == '□') {
+                Jogador.ehJogadaObrigatoria = ehJogadaObrigatoria;
+            } else {
+                IA.ehJogadaObrigatoria = ehJogadaObrigatoria;
+            }
         }
         // Agora que temos o ArrayList<ArrayList<int[][]>> pronto e povoado, vamos transforma-lo em int[][][][] para retorna-lo
         int[][][][] todasAsJogadasFormatado = new int[todasAsJogadas.size()][][][];
@@ -407,6 +415,18 @@ public class Analises {
         }
     }
 
+    public static char obterEstaPeca(int[] coordenada) {
+        return Tabuleiros.tabuleiro[coordenada[0]][coordenada[1]];
+    }
+
+    public static boolean ehDama(char peca) {
+        return (peca == '⊠' || peca == '◓');
+    }
+
+    public static boolean ehPartidaReal(char[][] tabuleiro) {
+        return (Tabuleiros.tabuleiro == tabuleiro);
+    }
+
     public static boolean coordenadasEscolhidasEhValida(int[] coordenadas, char jogador) {
         // Verifica se a coordenada recebida é uma coordenada jogável por este jogador
         int [][][][] todasAsJogadas;
@@ -437,7 +457,7 @@ public class Analises {
         // Retorna as jogadas que são possiveis realizar, a partir da peça selecionada
         // Cada jogada é um int[][] contendo coordenadas partida, coordenadas destino, e se existir, coordenadas de captura
         int[][][][] todasAsJogadas;
-        if (jogador == '□' || Main.modoDeJogo.equals("singleplayer")) {
+        if (jogador == '□' || Main.modoDeJogo.equals("multiplayer")) {
             todasAsJogadas = Jogador.todasAsJogadasPossiveis;
         }
         else {
@@ -464,38 +484,45 @@ public class Analises {
     }
 
     public static int[][][] obterJogadasDeCapturaMultipla(char jogador, int[] peca) {
+        return obterJogadasDeCapturaMultipla(jogador, peca, Tabuleiros.tabuleiro);
+    }
+
+    public static int[][][] obterJogadasDeCapturaMultipla(char jogador, int[] peca, char[][] tabuleiro) {
         // Esse metodo é parecido com o obterTodasAsJogadasPossiveis. Porém, ele analisa do ponto de vista de uma peça já selecionada
-        int[][][][] todasAsJogadas = obterTodasAsJogadasPossiveis(jogador);
+        int[][][][] todasAsJogadas = obterTodasAsJogadasPossiveis(jogador, tabuleiro);
 
         boolean ehJogadaObrigatoria;
         if (jogador == '□' || Main.modoDeJogo.equals("multiplayer")) {
             ehJogadaObrigatoria = Jogador.ehJogadaObrigatoria;
-        }
-        else {
+        } else {
             ehJogadaObrigatoria = IA.ehJogadaObrigatoria;
         }
         if (!ehJogadaObrigatoria) {
             return new int[0][][];
         }
 
+
         int[][][] jogadas;
         for (int i = 0; i < todasAsJogadas.length; i++) {
             if (todasAsJogadas[i].length > 0 && Arrays.equals(todasAsJogadas[i][0][0], peca)) {
                 jogadas = todasAsJogadas[i];
-                if (Main.modoDeJogo.equals("multiplayer") || jogador == '□') {
-                    Jogador.todasAsJogadasPossiveis = todasAsJogadas;
-                }
-                else {
-                    IA.todasAsJogadasPossiveis = todasAsJogadas;
+                if (ehPartidaReal(tabuleiro)) {
+                    if (Main.modoDeJogo.equals("multiplayer") || jogador == '□') {
+                        Jogador.todasAsJogadasPossiveis = todasAsJogadas;
+                    } else {
+                        IA.todasAsJogadasPossiveis = todasAsJogadas;
+                    }
                 }
                 return jogadas;
             }
         }
         // Caso não encontre, retorna um array de tamanho 0, e desativa a busca por novas jogadas
-        if (jogador == '□' || Main.modoDeJogo.equals("multiplayer")) {
-            Jogador.ehJogadaObrigatoria = false;
-        } else {
-            IA.ehJogadaObrigatoria = false;
+        if (ehPartidaReal(tabuleiro)) {
+            if (jogador == '□' || Main.modoDeJogo.equals("multiplayer")) {
+                Jogador.ehJogadaObrigatoria = false;
+            } else {
+                IA.ehJogadaObrigatoria = false;
+            }
         }
         return new int[0][][];
     }

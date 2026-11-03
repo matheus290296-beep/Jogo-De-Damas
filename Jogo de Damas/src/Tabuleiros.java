@@ -267,4 +267,14 @@ public class Tabuleiros {
         }
         System.out.println("   A B C D E F G H");
     }
+
+    public static char[][] copiarTabuleiro(char[][] tabuleiro) {
+        char[][] tabuleiroCopia = new char[8][8];
+        for (int linha = 0; linha < 8; linha++) {
+            for (int coluna = 0; coluna < 8; coluna++) {
+                tabuleiroCopia[linha][coluna] = tabuleiro[linha][coluna];
+            }
+        }
+        return tabuleiroCopia;
+    }
 }

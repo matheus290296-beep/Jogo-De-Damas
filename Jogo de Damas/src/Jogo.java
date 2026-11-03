@@ -46,25 +46,30 @@ public class Jogo {
     }
 
     public static void realizarJogada(int[][] jogada, char jogador) {
-        char pecaAtual = Tabuleiros.tabuleiro[jogada[0][0]][jogada[0][1]];
+        realizarJogada(jogada, jogador, Tabuleiros.tabuleiro);
+    }
+    public static void realizarJogada(int[][] jogada, char jogador, char[][] tabuleiro) {
+        char pecaAtual = tabuleiro[jogada[0][0]][jogada[0][1]];
 
         if (Main.debugging || debugging) {
             System.out.printf("(Jogo) Jogador que vai jogar: %s\n", jogador);
-            System.out.printf("(Jogo) Peça selecionada: %s\n", Analises.obterCoordenadaEmTexto(jogada[0]));
+            System.out.printf("(Jogo) Peça selecionada: %s nas coordenadas %s\n", Analises.obterEstaPeca(jogada[0]), Analises.obterCoordenadaEmTexto(jogada[0]));
             System.out.printf("(Jogo) Destino: %s\n", Analises.obterCoordenadaEmTexto(jogada[1]));
             if (jogada.length == 3) {
                 System.out.printf("(Jogo) Peça que foi comida: %s\n", Analises.obterCoordenadaEmTexto(jogada[2]));
             }
         }
-        Tabuleiros.tabuleiro[jogada[0][0]][jogada[0][1]] = ' ';
+        tabuleiro[jogada[0][0]][jogada[0][1]] = ' ';
         if (Analises.ehFinalDoTabuleiro(jogada[1], Analises.obterSimboloJogador(jogador))) {
-            System.out.printf("Peça nas coordenadas %s virou dama!\n", Analises.obterCoordenadaEmTexto(jogada[1]));
-            virarDama(jogada[1], jogador);
-        } else {
-            Tabuleiros.tabuleiro[jogada[1][0]][jogada[1][1]] = pecaAtual;
+            if (!Analises.ehDama(pecaAtual) && Analises.ehPartidaReal(tabuleiro)) {
+                System.out.printf("Peça nas coordenadas %s virou dama!\n", Analises.obterCoordenadaEmTexto(jogada[1]));
+                virarDama(jogada[1], jogador, tabuleiro);
+                pecaAtual = Analises.obterDama(jogador);
+            }
         }
+        tabuleiro[jogada[1][0]][jogada[1][1]] = pecaAtual;
         if (jogada.length == 3) {
-            Tabuleiros.tabuleiro[jogada[2][0]][jogada[2][1]] = ' ';
+            tabuleiro[jogada[2][0]][jogada[2][1]] = ' ';
         }
     }
 
@@ -76,13 +81,13 @@ public class Jogo {
         Tabuleiros.tabuleiroHipotetico[peca[0]][peca[1]] = Analises.obterSimboloSelecionado(jogador);
     }
 
-    public static void virarDama(int[] coordenada, char jogador) {
+    public static void virarDama(int[] coordenada, char jogador, char[][] tabuleiro) {
         int coordenadaUm = coordenada[0];
         int coordenadaDois = coordenada[1];
         if (jogador == '□') {
-            Tabuleiros.tabuleiro[coordenadaUm][coordenadaDois] = '⊠';
+            tabuleiro[coordenadaUm][coordenadaDois] = '⊠';
         } else {
-            Tabuleiros.tabuleiro[coordenadaUm][coordenadaDois] = '◓';
+            tabuleiro[coordenadaUm][coordenadaDois] = '◓';
         }
     }
 }

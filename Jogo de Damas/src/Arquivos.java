@@ -11,7 +11,7 @@ public class Arquivos {
     public static void garantirIntegridade() throws IOException {
         if (!Files.exists(caminhoPlacar)) {
             Files.createFile(caminhoPlacar);
-            Files.writeString(caminhoPlacar, "0;0;0");
+            Files.writeString(caminhoPlacar, "0;0");
         }
 
         if (!Files.exists(caminhoReplays)) {
@@ -40,7 +40,7 @@ public class Arquivos {
         int escolha = ValidadorInput.obterInt(1, 2);
         switch (escolha) {
             case 1:
-                Files.writeString(caminhoPlacar, "0;0;0");
+                Files.writeString(caminhoPlacar, "0;0");
                 break;
 
             case 2:
@@ -53,7 +53,6 @@ public class Arquivos {
         String[] placarFormatado = Files.readString(caminhoPlacar).split(";");
         System.out.printf("Vitórias: %s\n", placarFormatado[0]);
         System.out.printf("Derrotas: %s\n", placarFormatado[1]);
-        System.out.printf("Empates: %s\n", placarFormatado[2]);
     }
 
     public static void atualizarPlacar(String vencedor) throws IOException {
@@ -68,15 +67,11 @@ public class Arquivos {
                 int derrotas = Integer.parseInt(placar[1]) + 1;
                 placar[1] = String.valueOf(derrotas);
             }
-            case "EM" -> {
-                int derrotas = Integer.parseInt(placar[2]) + 1;
-                placar[2] = String.valueOf(derrotas);
-            }
             default -> {
                 return;
             }
         }
-        String placarFormatado = placar[0] + ";" + placar[1] + ";" + placar[2];
+        String placarFormatado = placar[0] + ";" + placar[1];
         Files.writeString(caminhoPlacar, placarFormatado);
     }
 

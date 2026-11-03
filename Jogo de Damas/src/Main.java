@@ -20,6 +20,7 @@ public class Main {
                 case 2:
                     Replays.iniciarGravacao();
                     modoDeJogo = "singleplayer";
+                    IA.dificuldade = Menus.obterDificuldade();
                     Jogo.iniciarPartida(tabuleiroTipo);
                     break;
 
