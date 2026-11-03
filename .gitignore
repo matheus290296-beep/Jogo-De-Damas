@@ -1,0 +1,12 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Java compilado
+*.class
+out/
+
+# Arquivos de dados locais
+Placar.txt
+Replays.txt
+
