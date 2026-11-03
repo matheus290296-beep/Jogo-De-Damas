@@ -39,7 +39,7 @@ public class Jogo {
             }
         } while (quemGanhou.contentEquals(" "));
 
-        if (Main.modoDeJogo.contentEquals("multiplayer")) {
+        if (Main.modoDeJogo.contentEquals("singleplayer")) {
             Arquivos.atualizarPlacar(quemGanhou);
         }
         Replays.gravarQuemGanhou(quemGanhou, Main.modoDeJogo);

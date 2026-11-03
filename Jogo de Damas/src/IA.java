@@ -16,21 +16,18 @@ public class IA {
     public static void jogadaIA(char jogador) throws InterruptedException {
         // 1a implementação de IA. De início, apenas joga aleatoriamente
         // Mais pra frente, tentarei adicionar mais inteligência às decisões da IA
-        System.out.println("Agora é a vez da IA!");
 
         todasAsJogadasPossiveis = Analises.obterTodasAsJogadasPossiveis(jogador);
         if (todasAsJogadasPossiveis.length == 0) {
             Jogo.quemGanhou = "JO";
+            System.out.println("Você ganhou! Pressione enter para voltar ao Menu Principal. . .");
+            ValidadorInput.scanner.nextLine();
             return;
         }
 
-//        int pecaEscolhida = random.nextInt(0, todasAsJogadasPossiveis.length);
-//        int jogadaEscolhida = random.nextInt(0, todasAsJogadasPossiveis[pecaEscolhida].length);
-//        int[] peca;
-//        int[][] jogada = todasAsJogadasPossiveis[pecaEscolhida][jogadaEscolhida];
-
+        System.out.println("Agora é a vez da IA!");
         System.out.println("(IA) Pensando . . .");
-        Thread.sleep(1500);
+        Thread.sleep(1000);
 
         // Metodo experimental de IA
         int[][] jogada = obterJogadaInteligente(dificuldade);
@@ -39,17 +36,28 @@ public class IA {
 
         Replays.gravarJogada(jogada);
         Jogo.realizarJogada(jogada, jogador);
+        if (jogada.length == 2) {
+            System.out.printf("(IA) Eu joguei a peça %s para %s!\n",
+                    Analises.obterCoordenadaEmTexto(jogada[0]), Analises.obterCoordenadaEmTexto(jogada[1]));
+        }
+        else {
+            System.out.printf("(IA) Eu joguei a peça %s para %s e capturei a peça %s!\n",
+                    Analises.obterCoordenadaEmTexto(jogada[0]),
+                    Analises.obterCoordenadaEmTexto(jogada[1]),
+                    Analises.obterCoordenadaEmTexto(jogada[2]));
+        }
 
-        // Lógica de capturas múltiplas ainda precisa de melhora
+        // Lógica de capturas múltiplas ainda pode ser melhorada
         while (ehJogadaObrigatoria) {
-            Tabuleiros.mostrarTabuleiro();
             peca = jogada[1];
             int[][][] jogadasDeCapturaMultipla = Analises.obterJogadasDeCapturaMultipla(jogador, peca);
             if (jogadasDeCapturaMultipla.length > 0) {
+                Tabuleiros.mostrarTabuleiro();
                 System.out.println("(IA) Eu posso capturar mais peças! Pensando . . .");
                 Thread.sleep(1000);
                 int jogadaEscolhida = random.nextInt(0, jogadasDeCapturaMultipla.length);
                 jogada = jogadasDeCapturaMultipla[jogadaEscolhida];
+                System.out.printf("Eu capturei a peça %s!\n", Analises.obterCoordenadaEmTexto(jogada[2]));
                 coordenadaDaUltimaJogada = jogada[1];
                 Replays.gravarJogada(jogada);
                 Jogo.realizarJogada(jogada, jogador);
@@ -88,7 +96,7 @@ public class IA {
                 }
                 else if (valorDestaJogada == valorMaximo) {
                     if (Main.debugging || debugging) {
-                        System.out.printf("Dei o valor de %d para a jogada %s a %s\n", valorMaximo,
+                        System.out.printf("(IA) Dei o valor de %d para a jogada %s a %s\n", valorMaximo,
                                 Analises.obterCoordenadaEmTexto(todasAsJogadas[peca][jogada][0]),
                                 Analises.obterCoordenadaEmTexto(todasAsJogadas[peca][jogada][1]));
                     }

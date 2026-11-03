@@ -257,6 +257,7 @@ public class Replays {
             ValidadorInput.scanner.nextLine();
         }
         System.out.printf("A partida acabou! Vencedor: %s\n\n", vencedor);
+        Tabuleiros.mostrarTabuleiroReplays(tabuleiroReplays);
         System.out.println("Pressione enter para voltar ao Menu Inicial. . .");
         ValidadorInput.scanner.nextLine();
     }

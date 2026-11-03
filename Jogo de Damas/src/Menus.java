@@ -18,7 +18,7 @@ public class Menus {
         System.out.println("3 - Tabuleiro gerado aleatoriamente");
         System.out.println("4 - Tabuleiro gerado aleatoriamente (CAOS)");
         if (Main.debugging) {
-            System.out.println("\n=========== DEBUGGING ===========");
+            System.out.println("=========== DEBUGGING ===========");
             System.out.println("5 - Tabuleiro de jogo normal, prestes à virar dama");
             System.out.println("6 - Tabuleiro prestes à comer várias peças");
             System.out.println("7 - Tabuleiro prestes à comer várias peças - versão dama");
