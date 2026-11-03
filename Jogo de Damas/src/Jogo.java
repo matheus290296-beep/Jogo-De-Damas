@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Random;
 
 public class Jogo {
@@ -8,6 +7,7 @@ public class Jogo {
     static String quemGanhou = " ";
 
     public static void iniciarPartida(int tabuleiroTipo) throws InterruptedException, IOException {
+        quemGanhou = " ";
         Tabuleiros.iniciarTabuleiro(tabuleiroTipo);
 
         int jogadorAtual = random.nextInt(1, 3);
@@ -46,6 +46,8 @@ public class Jogo {
     }
 
     public static void realizarJogada(int[][] jogada, char jogador) {
+        char pecaAtual = Tabuleiros.tabuleiro[jogada[0][0]][jogada[0][1]];
+
         if (Main.debugging || debugging) {
             System.out.printf("(Jogo) Jogador que vai jogar: %s\n", jogador);
             System.out.printf("(Jogo) Peça selecionada: %s\n", Analises.obterCoordenadaEmTexto(jogada[0]));
@@ -59,7 +61,7 @@ public class Jogo {
             System.out.printf("Peça nas coordenadas %s virou dama!\n", Analises.obterCoordenadaEmTexto(jogada[1]));
             virarDama(jogada[1], jogador);
         } else {
-            Tabuleiros.tabuleiro[jogada[1][0]][jogada[1][1]] = jogador;
+            Tabuleiros.tabuleiro[jogada[1][0]][jogada[1][1]] = pecaAtual;
         }
         if (jogada.length == 3) {
             Tabuleiros.tabuleiro[jogada[2][0]][jogada[2][1]] = ' ';

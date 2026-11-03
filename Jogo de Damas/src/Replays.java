@@ -125,7 +125,7 @@ public class Replays {
             }
             gravacaoTabuleiro.append(" ");
         }
-        gravacaoPartida += gravacaoTabuleiro + "- ";
+        gravacaoPartida += gravacaoTabuleiro + " - ";
         if (Main.debugging || debugging) {
             System.out.printf("Gravação da partida após gravarTabuleiro: %s\n", gravacaoPartida);
         }
@@ -303,7 +303,7 @@ public class Replays {
     }
 
     public static String obterData(String replay) {
-        String data = replay.substring(0, 9);
+        String data = replay.substring(11, 22);
         if (Main.debugging || debugging) {
             System.out.printf("(Replays) Data encontrada: %s\n", data);
         }
@@ -311,7 +311,7 @@ public class Replays {
     }
 
     public static String obterHorario(String replay) {
-        String horario = replay.substring(11, 22);
+        String horario = replay.substring(0, 9);
         if (Main.debugging || debugging) {
             System.out.printf("(Replays) Horário encontrado: %s\n", horario);
         }

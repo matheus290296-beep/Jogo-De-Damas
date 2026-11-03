@@ -24,7 +24,7 @@ public class Arquivos {
         }
         try {
             for (int i = 0; i < 3; i++) {
-                Integer.parseInt(placarFormatado[0]);
+                Integer.parseInt(placarFormatado[i]);
             }
         }
         catch (Exception e) {
@@ -60,21 +60,20 @@ public class Arquivos {
         String[] placar = Files.readString(caminhoPlacar).split(";");
 
         switch (vencedor) {
-            case "□" -> {
+            case "JO" -> {
                 int vitorias = Integer.parseInt(placar[0]) + 1;
                 placar[0] = String.valueOf(vitorias);
             }
-            case "○" -> {
+            case "CO" -> {
                 int derrotas = Integer.parseInt(placar[1]) + 1;
                 placar[1] = String.valueOf(derrotas);
             }
-            case "empate" -> {
-                int empates = Integer.parseInt(placar[2]) + 1;
-                placar[2] = String.valueOf(empates);
+            case "EM" -> {
+                int derrotas = Integer.parseInt(placar[2]) + 1;
+                placar[2] = String.valueOf(derrotas);
             }
             default -> {
-                System.out.println("Erro 8");
-                System.exit(8);
+                return;
             }
         }
         String placarFormatado = placar[0] + ";" + placar[1] + ";" + placar[2];

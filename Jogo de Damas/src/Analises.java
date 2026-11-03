@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,7 +9,7 @@ public class Analises {
         // Deve funcionar tanto para jogadas obrigatórias, quanto jogadas normais
         // Caso encontre uma jogada obrigatória, apaga as informações guardadas, e passa a adicionar apenas jogadas obrigatórias
 
-        char dama = obterloDama(jogador);
+        char dama = obterDama(jogador);
         char oponente = obterOponente(jogador);
         char damaOponente = obterDamaOponente(jogador);
 
@@ -190,13 +189,10 @@ public class Analises {
                                             // Caso tenha encontrado uma outra peça no caminho, ele para a análise
                                             break;
                                         }
-                                    }
-                                    else if (Tabuleiros.tabuleiro[linha + distancia][coluna + distancia] != ' ') {
-                                        // Caso tenha encontrado uma peça amiga, interrompe a análise
+                                    } else {
                                         break;
                                     }
                                 }
-                                // Caso encontramos uma peça do oponente no meio do caminho, paramos a verificação
                                 break;
                             }
                             // Isso roda caso encontramos uma de nossas peças no meio do caminho
@@ -344,13 +340,11 @@ public class Analises {
                 }
             }
         }
-        if (Main.modoDeJogo.equals("singleplayer")) {
+        if (Main.modoDeJogo.equals("multiplayer") || jogador == '□') {
             Jogador.ehJogadaObrigatoria = ehJogadaObrigatoria;
         }
         else {
-            if (jogador =='○') {
-                IA.ehJogadaObrigatoria = ehJogadaObrigatoria;
-            }
+            IA.ehJogadaObrigatoria = ehJogadaObrigatoria;
         }
         // Agora que temos o ArrayList<ArrayList<int[][]>> pronto e povoado, vamos transforma-lo em int[][][][] para retorna-lo
         int[][][][] todasAsJogadasFormatado = new int[todasAsJogadas.size()][][][];
@@ -364,7 +358,7 @@ public class Analises {
     }
 
 
-    public static char obterloDama(char simboloJogador) {
+    public static char obterDama(char simboloJogador) {
         if (simboloJogador == '□') {
             return '⊠';
         } else {
@@ -404,12 +398,8 @@ public class Analises {
         }
     }
 
-    public static char obterSimboloAtual(int[] coordenada) {
-        return Tabuleiros.tabuleiro[coordenada[0]][coordenada[1]];
-    }
-
     public static char obterSimboloJogador(char simbolo) {
-        if (simbolo == '⊠') {
+        if (simbolo == '⊠' || simbolo == '□') {
             return '□';
         }
         else {
@@ -418,9 +408,9 @@ public class Analises {
     }
 
     public static boolean coordenadasEscolhidasEhValida(int[] coordenadas, char jogador) {
-        // Verifica se a coordenada recebida pertence ao jogador que a selecionou
+        // Verifica se a coordenada recebida é uma coordenada jogável por este jogador
         int [][][][] todasAsJogadas;
-        if (jogador == '□' || Main.modoDeJogo.equals("singleplayer")) {
+        if (jogador == '□' || Main.modoDeJogo.equals("multiplayer")) {
             todasAsJogadas = Jogador.todasAsJogadasPossiveis;
         }
         else {
@@ -433,14 +423,6 @@ public class Analises {
             }
         }
         return false;
-    }
-
-    public static boolean ehPecaNormal(int[] coordenada) {
-        // Verifica se a peça é normal (true) ou uma dama (false)
-        int coordenadaUm = coordenada[0];
-        int coordenadaDois = coordenada[1];
-
-        return Tabuleiros.tabuleiro[coordenadaUm][coordenadaDois] != '⊠' && Tabuleiros.tabuleiro[coordenadaUm][coordenadaDois] != '◓';
     }
 
     public static boolean ehFinalDoTabuleiro(int[] coordenada, char jogador) {
@@ -483,27 +465,36 @@ public class Analises {
 
     public static int[][][] obterJogadasDeCapturaMultipla(char jogador, int[] peca) {
         // Esse metodo é parecido com o obterTodasAsJogadasPossiveis. Porém, ele analisa do ponto de vista de uma peça já selecionada
-        if (jogador == '□' || Main.modoDeJogo.equals("singleplayer")) {
-            Jogador.ehJogadaObrigatoria = false;
-            Jogador.todasAsJogadasPossiveis = obterTodasAsJogadasPossiveis(jogador);
+        int[][][][] todasAsJogadas = obterTodasAsJogadasPossiveis(jogador);
+
+        boolean ehJogadaObrigatoria;
+        if (jogador == '□' || Main.modoDeJogo.equals("multiplayer")) {
+            ehJogadaObrigatoria = Jogador.ehJogadaObrigatoria;
         }
         else {
-            IA.ehJogadaObrigatoria = false;
-            IA.todasAsJogadasPossiveis = obterTodasAsJogadasPossiveis(jogador);
+            ehJogadaObrigatoria = IA.ehJogadaObrigatoria;
+        }
+        if (!ehJogadaObrigatoria) {
+            return new int[0][][];
         }
 
         int[][][] jogadas;
-        for (int i = 0; i < Jogador.todasAsJogadasPossiveis.length; i++) {
-            if (Arrays.equals(Jogador.todasAsJogadasPossiveis[i][0][0], peca)) {
-                jogadas = Jogador.todasAsJogadasPossiveis[i];
+        for (int i = 0; i < todasAsJogadas.length; i++) {
+            if (todasAsJogadas[i].length > 0 && Arrays.equals(todasAsJogadas[i][0][0], peca)) {
+                jogadas = todasAsJogadas[i];
+                if (Main.modoDeJogo.equals("multiplayer") || jogador == '□') {
+                    Jogador.todasAsJogadasPossiveis = todasAsJogadas;
+                }
+                else {
+                    IA.todasAsJogadasPossiveis = todasAsJogadas;
+                }
                 return jogadas;
             }
         }
         // Caso não encontre, retorna um array de tamanho 0, e desativa a busca por novas jogadas
-        if (jogador == '□' || Main.modoDeJogo.equals("singleplayer")) {
-             Jogador.ehJogadaObrigatoria = false;
-        }
-        else {
+        if (jogador == '□' || Main.modoDeJogo.equals("multiplayer")) {
+            Jogador.ehJogadaObrigatoria = false;
+        } else {
             IA.ehJogadaObrigatoria = false;
         }
         return new int[0][][];

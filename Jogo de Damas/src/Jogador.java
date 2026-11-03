@@ -2,6 +2,7 @@ import java.util.Arrays;
 
 public class Jogador {
 
+    static boolean debugging = false;
     static int[][][][] todasAsJogadasPossiveis;
 
     // È atualizado pelo Analises.obterTodasAsJogadasPossiveis
@@ -33,6 +34,14 @@ public class Jogador {
             return;
         }
 
+        if (ehJogadaObrigatoria) {
+            System.out.printf("(Jogador %s) - Você possui jogadas obrigatórias!\n", jogador);
+            System.out.print("Coordenadas de peças que você pode escolher: ");
+            for (int i = 0; i < todasAsJogadasPossiveis.length; i++) {
+                System.out.printf("%s ", Analises.obterCoordenadaEmTexto(todasAsJogadasPossiveis[i][0][0]));
+            }
+            System.out.println();
+        }
         int[] peca = escolherPeca(jogador);
         int[][] jogada = escolherJogada(peca, jogador);
 
@@ -43,9 +52,13 @@ public class Jogador {
             peca = jogada[1];
             int[][][] jogadasDeCapturaMultipla = Analises.obterJogadasDeCapturaMultipla(jogador, peca);
             if (jogadasDeCapturaMultipla.length > 0) {
-            jogada = escolherJogada(peca, jogador);
+                System.out.printf("(Jogador %s) - Captura múltipla! Você pode capturar mais peças!\n", jogador);
+            jogada = escolherJogada(peca, jogador, jogadasDeCapturaMultipla);
                 Replays.gravarJogada(jogada);
                 Jogo.realizarJogada(jogada, jogador);
+            }
+            else {
+                ehJogadaObrigatoria = false;
             }
         }
     }
@@ -68,10 +81,13 @@ public class Jogador {
         // Recebemos a coordenada da peça selecionada
         // Objetivo: Mostrar a peça selecionada no tabuleiro de forma clara, e mostrar as jogadas possíveis dessa peça
         // No final, obtém a jogada int[][] a ser feita e a retorna
-        Tabuleiros.criarTabuleiroHipotetico();
-
         int[][][] jogadasPossiveis = Analises.obterJogadasPossiveis(peca, jogador);
+        return escolherJogada(peca, jogador, jogadasPossiveis);
+    }
 
+    public static int[][] escolherJogada(int[] peca, char jogador, int[][][] jogadasPossiveis) {
+        // Mesmo metodo que o de acima, porém recebe já o array de jogadas pré-definido
+        Tabuleiros.criarTabuleiroHipotetico();
         Jogo.inserirJogadasPossiveis(jogadasPossiveis, peca, jogador);
         Tabuleiros.mostrarTabuleiroHipotetico();
         mostrarCoordenadasJogaveis(jogadasPossiveis);
@@ -99,49 +115,6 @@ public class Jogador {
                 }
             }
             System.out.println("Coordenada inválida! Selecione uma coordenada válida para jogar!");
-        }
-    }
-
-    public static void mostrarPecasObrigatorias(int[][] pecasObrigatorias) {
-        System.out.println("Você tem jogadas obrigatórias nesse turno! Você deve comer uma peça inimiga!");
-        System.out.print("Coordenadas das peças que você pode escolher: ");
-        for (int i = 0; i < pecasObrigatorias.length; i++) {
-            String coordenadaTexto = Analises.obterCoordenadaEmTexto(pecasObrigatorias[i]);
-            System.out.printf("%s ", coordenadaTexto);
-        }
-        System.out.println();
-    }
-
-    public static int[] escolherPecaObrigatoria(int[][] pecasObrigatorias) {
-        // Recebemos um int[][] com a listagem de peças que o jogador é obrigado a receber. Aqui, ele precisa escolher uma delas
-        System.out.println("Escolha sua peça: ");
-        int[] escolha;
-        while (true) {
-            escolha = ValidadorInput.obterCoordenadas();
-            for (int i = 0; i < pecasObrigatorias.length; i++) {
-                if (Arrays.equals(pecasObrigatorias[i], escolha)) {
-                    return escolha;
-                }
-            }
-            System.out.println("Peça inválida! Você é obrigado a comer uma peça inimiga nesse round!");
-        }
-    }
-
-    public static int[] escolherJogadaObrigatoria(int[][] jogadasObrigatorias) {
-        System.out.print("Você pode jogar nessas coordenadas com essa peça: ");
-        for (int i = 0; i < jogadasObrigatorias.length; i++) {
-            System.out.printf("%s ", Analises.obterCoordenadaEmTexto(jogadasObrigatorias[i]));
-        }
-        System.out.println();
-        System.out.println("Escolha: ");
-        while (true) {
-            int[] coordenadasEscolhida = ValidadorInput.obterCoordenadas();
-            for (int i = 0; i < jogadasObrigatorias.length; i++) {
-                if (!Arrays.equals(coordenadasEscolhida, jogadasObrigatorias[i])) {
-                    System.out.println("Coordenada inválida! Você precisa comer uma peça do inimigo!");
-                }
-            }
-            return coordenadasEscolhida;
         }
     }
 }

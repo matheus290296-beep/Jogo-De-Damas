@@ -44,8 +44,8 @@ public class Main {
                     break;
 
                 default:
-                    System.out.println("(Main) Erro 6");
-                    System.exit(6);
+                    System.out.println("Erro! Isso não deveria acontecer!");
+                    break;
             }
         }
     }

@@ -95,7 +95,8 @@ public class Tabuleiros {
     }
 
     public static void gerarTabuleiroAleatorio(String tipo) {
-        Random random = new Random();;
+        Random random = new Random();
+        tabuleiro = gerarTabuleiroVazio();
 
         System.out.println("Quantas peças para cada jogador devo gerar?");
         int pecasPraCadaJogador = ValidadorInput.obterInt(1, 12);

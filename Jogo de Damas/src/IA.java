@@ -16,7 +16,7 @@ public class IA {
 
         todasAsJogadasPossiveis = Analises.obterTodasAsJogadasPossiveis(jogador);
         if (todasAsJogadasPossiveis.length == 0) {
-            Jogo.quemGanhou = "J1";
+            Jogo.quemGanhou = "JO";
             return;
         }
 
@@ -32,16 +32,19 @@ public class IA {
         Jogo.realizarJogada(jogada, jogador);
 
         while (ehJogadaObrigatoria) {
-            System.out.println("(IA) Eu posso capturar mais peças! Pensando . . .");
-            Thread.sleep(1000);
-
+            Tabuleiros.mostrarTabuleiro();
             peca = jogada[1];
             int[][][] jogadasDeCapturaMultipla = Analises.obterJogadasDeCapturaMultipla(jogador, peca);
             if (jogadasDeCapturaMultipla.length > 0) {
+                System.out.println("(IA) Eu posso capturar mais peças! Pensando . . .");
+                Thread.sleep(1000);
                 jogadaEscolhida = random.nextInt(0, jogadasDeCapturaMultipla.length);
                 jogada = jogadasDeCapturaMultipla[jogadaEscolhida];
                 Replays.gravarJogada(jogada);
                 Jogo.realizarJogada(jogada, jogador);
+            }
+            else {
+                ehJogadaObrigatoria = false;
             }
         }
     }
