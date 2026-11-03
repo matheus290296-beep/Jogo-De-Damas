@@ -194,9 +194,11 @@ public class Analises {
                                             break;
                                         }
                                     } else {
+                                        // Break para impedir ArrayOutOfBounds
                                         break;
                                     }
                                 }
+                                // Break para impedir que uma jogada consiga pular duas ou mais peças inimigas de uma só vez
                                 break;
                             }
                             // Isso roda caso encontramos uma de nossas peças no meio do caminho

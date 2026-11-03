@@ -19,11 +19,11 @@ public class Arquivos {
         }
 
         String[] placarFormatado = Files.readString(caminhoPlacar).split(";");
-        if (placarFormatado.length != 3) {
+        if (placarFormatado.length != 2) {
             placarCorrompido();
         }
         try {
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 2; i++) {
                 Integer.parseInt(placarFormatado[i]);
             }
         }

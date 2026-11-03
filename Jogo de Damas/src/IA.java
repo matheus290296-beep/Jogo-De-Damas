@@ -14,9 +14,6 @@ public class IA {
     static int dificuldade = 2;
 
     public static void jogadaIA(char jogador) throws InterruptedException {
-        // 1a implementação de IA. De início, apenas joga aleatoriamente
-        // Mais pra frente, tentarei adicionar mais inteligência às decisões da IA
-
         todasAsJogadasPossiveis = Analises.obterTodasAsJogadasPossiveis(jogador);
         if (todasAsJogadasPossiveis.length == 0) {
             Jogo.quemGanhou = "JO";
