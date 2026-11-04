@@ -72,6 +72,7 @@ public class IA {
         // 3 - Realizar o cálculo valorJogada = pecasComidas - pecasPerdidas
         // 4 - Obter todas as jogadas que tenham o valor máximo possível desse valorJogada
         // 5 - Escolher aleatoriamente uma jogada dentre estas com valor máximo, e retorna-la
+
         int[][][][] todasAsJogadas = todasAsJogadasPossiveis;
 
         // A IA sempre será o ○

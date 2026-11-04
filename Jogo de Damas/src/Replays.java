@@ -143,6 +143,10 @@ public class Replays {
         String jogada = "[" + coordenadasDaJogada[0][0] + coordenadasDaJogada[0][1] + "," + coordenadasDaJogada[1][0] + coordenadasDaJogada[1][1];
         gravacaoPartida += jogada;
 
+        if (coordenadasDaJogada.length == 3) {
+            gravarPecaComida(coordenadasDaJogada[2]);
+        }
+
         if (Main.debugging || debugging) {
             System.out.printf("Gravação da partida após gravarJogada: %s\n", gravacaoPartida);
         }

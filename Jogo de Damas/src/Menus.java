@@ -142,10 +142,10 @@ public class Menus {
         System.out.println("3 - Difícil");
         int escolha = ValidadorInput.obterInt(1, 3);
         return switch (escolha) {
-            case 1 -> 2;
-            case 2 -> 5;
-            case 3 -> 8;
-            default -> 2;
+            case 1 -> 1;
+            case 2 -> 3;
+            case 3 -> 5;
+            default -> 3;
         };
     }
 }
